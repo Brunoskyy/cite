@@ -1,0 +1,13 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: cite
+      POSTGRES_PASSWORD: cite
+      POSTGRES_DB: cite
+    ports:
+      - '5432:5432'
+    volumes:
+      - cite-db:/var/lib/postgresql/data
+volumes:
+  cite-db:

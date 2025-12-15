@@ -1,0 +1,6 @@
+.next
+node_modules
+corpus
+coverage
+package-lock.json
+evals/runs

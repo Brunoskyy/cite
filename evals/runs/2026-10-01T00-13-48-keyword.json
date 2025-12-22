@@ -1,0 +1,469 @@
+{
+  "kind": "retrieval",
+  "id": "2026-10-01T00-13-48-keyword",
+  "label": "keyword",
+  "mode": "keyword",
+  "k": 5,
+  "createdAt": "2026-10-01T00:13:48.257Z",
+  "msPerQuestion": 2,
+  "metrics": {
+    "n": 41,
+    "recallAt1": 0.366,
+    "recallAt3": 0.585,
+    "recallAt5": 0.659,
+    "mrr": 0.479
+  },
+  "results": [
+    {
+      "id": "cancel-manual",
+      "rank": 1,
+      "retrieved": [
+        "guides/query-cancellation.md:160-189",
+        "guides/filters.md:26-44",
+        "comparison.md:70-72",
+        "guides/parallel-queries.md:31-63",
+        "guides/parallel-queries.md:8-29"
+      ]
+    },
+    {
+      "id": "cancel-default",
+      "rank": 3,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "guides/query-cancellation.md:160-189",
+        "guides/query-cancellation.md:10-14",
+        "guides/disabling-queries.md:6-19",
+        "guides/query-keys.md:77-96"
+      ]
+    },
+    {
+      "id": "cancel-fetch",
+      "rank": null,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "guides/query-keys.md:77-96",
+        "guides/query-functions.md:77-98",
+        "guides/query-functions.md:100-119",
+        "guides/default-query-function.md:6-56"
+      ]
+    },
+    {
+      "id": "stale-default",
+      "rank": null,
+      "retrieved": [
+        "comparison.md:70-72",
+        "guides/filters.md:26-44",
+        "guides/disabling-queries.md:6-19",
+        "guides/query-keys.md:77-96",
+        "guides/advanced-ssr.md:352-362"
+      ]
+    },
+    {
+      "id": "gc-default",
+      "rank": null,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "guides/migrating-to-react-query-4.md:218-241",
+        "guides/migrating-to-react-query-4.md:322-328",
+        "guides/caching.md:26-32",
+        "guides/query-keys.md:77-96"
+      ]
+    },
+    {
+      "id": "retry-default",
+      "rank": 5,
+      "retrieved": [
+        "guides/query-retries.md:6-33",
+        "guides/query-retries.md:37-80",
+        "guides/filters.md:26-44",
+        "comparison.md:70-72",
+        "guides/important-defaults.md:24-37"
+      ]
+    },
+    {
+      "id": "retry-delay",
+      "rank": 2,
+      "retrieved": [
+        "guides/query-retries.md:6-33",
+        "guides/query-retries.md:37-80",
+        "guides/query-retries.md:82-105",
+        "guides/migrating-to-v5.md:383-391",
+        "guides/migrating-to-v5.md:446-473"
+      ]
+    },
+    {
+      "id": "keys-array",
+      "rank": null,
+      "retrieved": [
+        "guides/query-keys.md:77-96",
+        "guides/migrating-to-react-query-4.md:59-70",
+        "guides/query-invalidation.md:26-57",
+        "comparison.md:70-72",
+        "guides/filters.md:26-44"
+      ]
+    },
+    {
+      "id": "keys-hash",
+      "rank": null,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "guides/query-keys.md:77-96",
+        "guides/migrating-to-react-query-4.md:59-70",
+        "comparison.md:70-72",
+        "guides/parallel-queries.md:31-63"
+      ]
+    },
+    {
+      "id": "keys-deps",
+      "rank": 1,
+      "retrieved": [
+        "guides/query-keys.md:77-96",
+        "guides/migrating-to-react-query-4.md:59-70",
+        "comparison.md:70-72",
+        "guides/query-functions.md:77-98",
+        "guides/filters.md:26-44"
+      ]
+    },
+    {
+      "id": "dependent",
+      "rank": null,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "comparison.md:70-72",
+        "guides/query-keys.md:77-96",
+        "guides/parallel-queries.md:31-63",
+        "guides/query-invalidation.md:26-57"
+      ]
+    },
+    {
+      "id": "disable",
+      "rank": 2,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "guides/disabling-queries.md:6-19",
+        "guides/query-keys.md:77-96",
+        "comparison.md:70-72",
+        "guides/parallel-queries.md:31-63"
+      ]
+    },
+    {
+      "id": "skiptoken",
+      "rank": 1,
+      "retrieved": [
+        "guides/disabling-queries.md:96-126",
+        "guides/disabling-queries.md:6-19",
+        "typescript.md:269-274",
+        "reference/functions/useQuery.md:287-314",
+        "devtools.md:75-97"
+      ]
+    },
+    {
+      "id": "parallel-dynamic",
+      "rank": 2,
+      "retrieved": [
+        "guides/parallel-queries.md:8-29",
+        "guides/parallel-queries.md:31-63",
+        "guides/query-keys.md:77-96",
+        "comparison.md:70-72",
+        "guides/filters.md:26-44"
+      ]
+    },
+    {
+      "id": "pagination",
+      "rank": 1,
+      "retrieved": [
+        "guides/paginated-queries.md:35-87",
+        "guides/infinite-queries.md:207-231",
+        "guides/testing.md:123-179",
+        "guides/infinite-queries.md:140-157",
+        "guides/infinite-queries.md:192-205"
+      ]
+    },
+    {
+      "id": "infinite-basic",
+      "rank": 4,
+      "retrieved": [
+        "reference/functions/useInfiniteQuery.md:171-209",
+        "reference/functions/useInfiniteQuery.md:331-369",
+        "reference/functions/useInfiniteQuery.md:409-443",
+        "guides/infinite-queries.md:45-98",
+        "reference/functions/useSuspenseInfiniteQuery.md:79-142"
+      ]
+    },
+    {
+      "id": "infinite-bidirectional",
+      "rank": 1,
+      "retrieved": [
+        "guides/infinite-queries.md:122-138",
+        "guides/migrating-to-react-query-3.md:169-196",
+        "guides/migrating-to-v5.md:508-516",
+        "guides/migrating-to-react-query-3.md:196-232",
+        "guides/infinite-queries.md:118-120"
+      ]
+    },
+    {
+      "id": "infinite-refetch",
+      "rank": 1,
+      "retrieved": [
+        "guides/infinite-queries.md:118-120",
+        "guides/migrating-to-v5.md:508-516",
+        "guides/filters.md:26-44",
+        "comparison.md:70-72",
+        "guides/disabling-queries.md:6-19"
+      ]
+    },
+    {
+      "id": "initial-data",
+      "rank": 2,
+      "retrieved": [
+        "guides/placeholder-query-data.md:6-19",
+        "guides/initial-query-data.md:105-122",
+        "guides/initial-query-data.md:124-141",
+        "guides/initial-query-data.md:143-169",
+        "guides/placeholder-query-data.md:71-95"
+      ]
+    },
+    {
+      "id": "initial-from-cache",
+      "rank": 2,
+      "retrieved": [
+        "guides/placeholder-query-data.md:6-19",
+        "guides/initial-query-data.md:105-122",
+        "guides/initial-query-data.md:124-141",
+        "guides/initial-query-data.md:143-169",
+        "guides/disabling-queries.md:96-126"
+      ]
+    },
+    {
+      "id": "placeholder",
+      "rank": 1,
+      "retrieved": [
+        "guides/placeholder-query-data.md:6-19",
+        "guides/placeholder-query-data.md:71-95",
+        "guides/initial-query-data.md:105-122",
+        "guides/placeholder-query-data.md:38-53",
+        "guides/initial-query-data.md:124-141"
+      ]
+    },
+    {
+      "id": "invalidate-after-mutation",
+      "rank": null,
+      "retrieved": [
+        "guides/mutations.md:291-340",
+        "guides/mutations.md:218-245",
+        "guides/filters.md:46-72",
+        "guides/optimistic-updates.md:92-127",
+        "guides/mutations.md:397-413"
+      ]
+    },
+    {
+      "id": "invalidate-matching",
+      "rank": 1,
+      "retrieved": [
+        "guides/query-invalidation.md:57-102",
+        "guides/query-invalidation.md:26-57",
+        "guides/mutations.md:291-340",
+        "guides/migrating-to-react-query-4.md:59-70",
+        "guides/query-invalidation.md:102-133"
+      ]
+    },
+    {
+      "id": "update-from-response",
+      "rank": 1,
+      "retrieved": [
+        "guides/updates-from-mutation-responses.md:6-54",
+        "guides/filters.md:46-72",
+        "guides/placeholder-query-data.md:6-19",
+        "guides/mutations.md:218-245",
+        "guides/caching.md:19-27"
+      ]
+    },
+    {
+      "id": "optimistic-cache",
+      "rank": 3,
+      "retrieved": [
+        "guides/filters.md:46-72",
+        "guides/mutations.md:218-245",
+        "guides/optimistic-updates.md:92-127",
+        "guides/mutations.md:137-169",
+        "guides/mutations.md:291-340"
+      ]
+    },
+    {
+      "id": "optimistic-ui",
+      "rank": null,
+      "retrieved": [
+        "guides/migrating-to-v5.md:479-506",
+        "guides/optimistic-updates.md:92-127",
+        "guides/optimistic-updates.md:129-182",
+        "guides/optimistic-updates.md:86-90",
+        "guides/caching.md:19-27"
+      ]
+    },
+    {
+      "id": "mutation-reset",
+      "rank": null,
+      "retrieved": [
+        "guides/mutations.md:48-60",
+        "guides/filters.md:46-72",
+        "guides/mutations.md:218-245",
+        "guides/mutations.md:345-353",
+        "guides/mutations.md:291-340"
+      ]
+    },
+    {
+      "id": "mutation-side-effects",
+      "rank": 1,
+      "retrieved": [
+        "guides/mutations.md:137-169",
+        "guides/mutations.md:169-187",
+        "guides/mutations.md:218-245",
+        "reference/functions/useMutation.md:50-58",
+        "guides/migrating-to-react-query-4.md:322-328"
+      ]
+    },
+    {
+      "id": "mutation-scopes",
+      "rank": 1,
+      "retrieved": [
+        "guides/mutations.md:397-413",
+        "guides/filters.md:46-72",
+        "guides/mutations.md:218-245",
+        "guides/mutations.md:48-60",
+        "guides/mutations.md:345-353"
+      ]
+    },
+    {
+      "id": "network-mode",
+      "rank": 2,
+      "retrieved": [
+        "guides/migrating-to-react-query-4.md:157-174",
+        "guides/network-mode.md:32-36",
+        "guides/network-mode.md:42-46",
+        "guides/polling.md:80-97",
+        "plugins/createPersister.md:68-70"
+      ]
+    },
+    {
+      "id": "polling",
+      "rank": null,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "comparison.md:70-72",
+        "guides/query-keys.md:77-96",
+        "guides/parallel-queries.md:31-63",
+        "guides/query-invalidation.md:26-57"
+      ]
+    },
+    {
+      "id": "polling-background",
+      "rank": 1,
+      "retrieved": [
+        "guides/polling.md:44-59",
+        "guides/query-retries.md:82-105",
+        "guides/background-fetching-indicators.md:42-60",
+        "guides/polling.md:61-78",
+        "guides/polling.md:80-97"
+      ]
+    },
+    {
+      "id": "window-focus",
+      "rank": null,
+      "retrieved": [
+        "guides/window-focus-refetching.md:43-66",
+        "guides/window-focus-refetching.md:107-111",
+        "guides/migrating-to-v5.md:306-308",
+        "guides/window-focus-refetching.md:68-89",
+        "guides/window-focus-refetching.md:91-105"
+      ]
+    },
+    {
+      "id": "select",
+      "rank": null,
+      "retrieved": [
+        "guides/placeholder-query-data.md:6-19",
+        "guides/migrating-to-v5.md:145-154",
+        "guides/migrating-to-react-query-3.md:447-462",
+        "guides/initial-query-data.md:105-122",
+        "guides/placeholder-query-data.md:71-95"
+      ]
+    },
+    {
+      "id": "tracked",
+      "rank": 1,
+      "retrieved": [
+        "guides/render-optimizations.md:18-24",
+        "guides/render-optimizations.md:26-46",
+        "comparison.md:68-68",
+        "guides/advanced-ssr.md:352-362",
+        "guides/migrating-to-react-query-3.md:343-371"
+      ]
+    },
+    {
+      "id": "prefetch-hover",
+      "rank": 3,
+      "retrieved": [
+        "guides/placeholder-query-data.md:6-19",
+        "guides/ssr.md:399-450",
+        "guides/prefetching.md:85-113",
+        "guides/advanced-ssr.md:106-161",
+        "guides/prefetching.md:31-39"
+      ]
+    },
+    {
+      "id": "ssr-hydration",
+      "rank": 5,
+      "retrieved": [
+        "guides/advanced-ssr.md:206-225",
+        "guides/advanced-ssr.md:12-16",
+        "guides/advanced-ssr.md:18-22",
+        "guides/advanced-ssr.md:28-78",
+        "guides/ssr.md:188-220"
+      ]
+    },
+    {
+      "id": "suspense-reset",
+      "rank": 1,
+      "retrieved": [
+        "guides/suspense.md:58-93",
+        "guides/suspense.md:6-25",
+        "guides/suspense.md:93-119",
+        "guides/filters.md:26-44",
+        "guides/ssr.md:452-485"
+      ]
+    },
+    {
+      "id": "testing-retries",
+      "rank": null,
+      "retrieved": [
+        "guides/filters.md:26-44",
+        "comparison.md:70-72",
+        "guides/query-keys.md:77-96",
+        "guides/query-retries.md:6-33",
+        "guides/parallel-queries.md:31-63"
+      ]
+    },
+    {
+      "id": "v5-single-signature",
+      "rank": null,
+      "retrieved": [
+        "guides/migrating-to-react-query-4.md:59-70",
+        "guides/query-keys.md:77-96",
+        "guides/migrating-to-v5.md:250-274",
+        "guides/migrating-to-v5.md:55-86",
+        "guides/migrating-to-react-query-3.md:125-141"
+      ]
+    },
+    {
+      "id": "v5-callbacks",
+      "rank": 1,
+      "retrieved": [
+        "guides/migrating-to-v5.md:141-143",
+        "guides/migrating-to-react-query-4.md:268-279",
+        "guides/migrating-to-v5.md:145-154",
+        "guides/dependent-queries.md:60-89",
+        "guides/migrating-to-react-query-3.md:464-482"
+      ]
+    }
+  ]
+}

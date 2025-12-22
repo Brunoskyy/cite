@@ -1,0 +1,197 @@
+# The eval set. Each answerable question names where the answer lives:
+# a file and either a section heading (resolved to its line range by
+# src/lib/evals.ts) or an explicit line range. A retrieved passage counts
+# as a hit when it comes from that file and overlaps those lines.
+#
+# Questions marked `answerable: false` are about things the corpus does
+# not cover; the right behaviour is to say so, not to guess.
+
+- id: cancel-manual
+  question: How do I cancel a query manually?
+  file: guides/query-cancellation.md
+  section: Manual Cancellation
+- id: cancel-default
+  question: Are queries cancelled automatically when the component unmounts?
+  file: guides/query-cancellation.md
+  section: Default behavior
+- id: cancel-fetch
+  question: How do I pass the abort signal to fetch in my query function?
+  file: guides/query-cancellation.md
+  section: Using `fetch`
+- id: stale-default
+  question: Why does my query refetch every time the component mounts?
+  file: guides/important-defaults.md
+  lines: [7, 21]
+- id: gc-default
+  question: How long do inactive queries stay in the cache before being garbage collected?
+  file: guides/important-defaults.md
+  lines: [25, 28]
+- id: retry-default
+  question: How many times does a failed query retry by default?
+  file: guides/important-defaults.md
+  lines: [30, 32]
+- id: retry-delay
+  question: How do I change the delay between retries?
+  file: guides/query-retries.md
+  section: Retry Delay
+- id: keys-array
+  question: How should I include variables like a todo id in a query key?
+  file: guides/query-keys.md
+  section: Array Keys with variables
+- id: keys-hash
+  question: Does the order of properties in an object inside a query key matter?
+  file: guides/query-keys.md
+  section: Query Keys are hashed deterministically!
+- id: keys-deps
+  question: Why should every variable my query function uses be part of the query key?
+  file: guides/query-keys.md
+  section: If your query function depends on a variable, include it in your query key
+- id: dependent
+  question: How do I run a query only after another query has finished?
+  file: guides/dependent-queries.md
+  section: useQuery dependent Query
+- id: disable
+  question: How do I stop a query from running automatically?
+  file: guides/disabling-queries.md
+  lines: [1, 56]
+- id: skiptoken
+  question: What is skipToken and when should I use it instead of enabled false?
+  file: guides/disabling-queries.md
+  section: Typesafe disabling of queries using `skipToken`
+- id: parallel-dynamic
+  question: How do I run a variable number of queries in parallel?
+  file: guides/parallel-queries.md
+  section: Dynamic Parallel Queries with `useQueries`
+- id: pagination
+  question: How do I keep showing the previous page while the next page loads?
+  file: guides/paginated-queries.md
+  section: Better Paginated Queries with `placeholderData`
+- id: infinite-basic
+  question: How do I build a load more button with useInfiniteQuery?
+  file: guides/infinite-queries.md
+  section: Example
+- id: infinite-bidirectional
+  question: How do I implement a bi-directional infinite list?
+  file: guides/infinite-queries.md
+  section: What if I want to implement a bi-directional infinite list?
+- id: infinite-refetch
+  question: What happens when an infinite query is refetched?
+  file: guides/infinite-queries.md
+  section: What happens when an infinite query needs to be refetched?
+- id: initial-data
+  question: How do I prepopulate a query with data I already have?
+  file: guides/initial-query-data.md
+  section: Using `initialData` to prepopulate a query
+- id: initial-from-cache
+  question: Can I use data from a list query as the initial data for a detail query?
+  file: guides/initial-query-data.md
+  section: Initial Data from Cache
+- id: placeholder
+  question: What is the difference between placeholder data and initial data?
+  file: guides/placeholder-query-data.md
+  section: What is placeholder data?
+- id: invalidate-after-mutation
+  question: How do I refetch the todo list after a mutation succeeds?
+  file: guides/invalidations-from-mutations.md
+  lines: [1, 52]
+- id: invalidate-matching
+  question: Does invalidateQueries with the key todos also invalidate todos with an id?
+  file: guides/query-invalidation.md
+  section: Query Matching with `invalidateQueries`
+- id: update-from-response
+  question: How do I update the cache with the data returned by a mutation?
+  file: guides/updates-from-mutation-responses.md
+  lines: [1, 55]
+- id: optimistic-cache
+  question: How do I do an optimistic update and roll back if the mutation fails?
+  file: guides/optimistic-updates.md
+  section: Updating a list of todos when adding a new todo
+- id: optimistic-ui
+  question: Can I show an optimistic update without touching the cache?
+  file: guides/optimistic-updates.md
+  section: Via the UI
+- id: mutation-reset
+  question: How do I clear the error state of a mutation?
+  file: guides/mutations.md
+  section: Resetting Mutation State
+- id: mutation-side-effects
+  question: What callbacks does useMutation accept for side effects?
+  file: guides/mutations.md
+  section: Mutation Side Effects
+- id: mutation-scopes
+  question: How can I make mutations with the same scope run one after another?
+  file: guides/mutations.md
+  section: Mutation Scopes
+- id: network-mode
+  question: What does networkMode offlineFirst do?
+  file: guides/network-mode.md
+  section: 'Network Mode: offlineFirst'
+- id: polling
+  question: How do I poll a query every few seconds?
+  file: guides/polling.md
+  lines: [1, 21]
+- id: polling-background
+  question: Does polling continue when the browser tab is in the background?
+  file: guides/polling.md
+  section: Background polling
+- id: window-focus
+  question: How do I turn off refetching when the window regains focus?
+  file: guides/window-focus-refetching.md
+  lines: [1, 42]
+- id: select
+  question: How do I transform or select part of the query data?
+  file: guides/render-optimizations.md
+  section: select
+- id: tracked
+  question: Why does my component not re-render when a property I don't use changes?
+  file: guides/render-optimizations.md
+  section: tracked properties
+- id: prefetch-hover
+  question: How do I prefetch data when the user hovers over a link?
+  file: guides/prefetching.md
+  section: Prefetch in event handlers
+- id: ssr-hydration
+  question: How do I prefetch on the server and hydrate on the client in the Next.js pages router?
+  file: guides/ssr.md
+  section: Full Next.js pages router example
+- id: suspense-reset
+  question: How do I reset a query after an error boundary catches its error with suspense?
+  file: guides/suspense.md
+  section: Resetting Error Boundaries
+- id: testing-retries
+  question: Why do my tests time out when a query fails?
+  file: guides/testing.md
+  section: Turn off retries
+- id: v5-single-signature
+  question: In v5, can I still call useQuery with the key and function as separate arguments?
+  file: guides/migrating-to-v5.md
+  section: Supports a single signature, one object
+- id: v5-callbacks
+  question: Where did the onSuccess callback on useQuery go in v5?
+  file: guides/migrating-to-v5.md
+  section: Callbacks on useQuery (and QueryObserver) have been removed
+
+- id: absent-swr
+  question: How do I configure SWR's dedupingInterval?
+  answerable: false
+- id: absent-graphql-codegen
+  question: How do I set up GraphQL Code Generator with fragments?
+  answerable: false
+- id: absent-vue
+  question: How do I use useQuery inside a Vue 3 composable with script setup?
+  answerable: false
+- id: absent-redux-saga
+  question: How do I write a Redux saga that retries a failed API call?
+  answerable: false
+- id: absent-django
+  question: How do I enable CORS in a Django REST framework backend?
+  answerable: false
+- id: absent-websocket-server
+  question: How do I scale a WebSocket server across several Node processes?
+  answerable: false
+- id: absent-css
+  question: How do I center a div with CSS grid?
+  answerable: false
+- id: absent-pricing
+  question: How much does a TanStack Query Pro license cost per seat?
+  answerable: false

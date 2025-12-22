@@ -71,7 +71,7 @@ export function chunkMarkdown(file: string, source: string, options: ChunkOption
         title = heading
         continue
       }
-      if (current.lines.some((l) => l.text.trim() !== '')) sections.push(current)
+      if (hasBody(current)) sections.push(current)
       while (stack.length && (stack[stack.length - 1]?.level ?? 0) >= level) stack.pop()
       stack.push({ level, text: heading })
       current = { headings: stack.map((s) => s.text), lines: [{ n: i + 1, text }] }
@@ -79,7 +79,7 @@ export function chunkMarkdown(file: string, source: string, options: ChunkOption
     }
     current.lines.push({ n: i + 1, text })
   }
-  if (current.lines.some((l) => l.text.trim() !== '')) sections.push(current)
+  if (hasBody(current)) sections.push(current)
 
   const docTitle = title ?? file.replace(/\.md$/, '').split('/').pop() ?? file
   const chunks: Chunk[] = []
@@ -149,6 +149,19 @@ function windows(
     start = Math.max(end - overlap, start + 1)
   }
   return out
+}
+
+/**
+ * A section with nothing under its heading (a "## Parameters" followed
+ * straight by a sub-heading) is not a passage anyone can be pointed at.
+ * Markdown comments like `[//]: # 'Example'` do not count as content.
+ */
+function hasBody(section: Section): boolean {
+  return section.lines.some((l, i) => {
+    const t = l.text.trim()
+    if (t === '' || t.startsWith('[//]: #')) return false
+    return !(i === 0 && HEADING.test(l.text))
+  })
 }
 
 function trimBlank(lines: Section['lines']): Section['lines'] {

@@ -1,17 +1,17 @@
 {
   "kind": "retrieval",
-  "id": "2026-10-01T00-15-18-rerank",
-  "label": "hybrid + rerank",
-  "mode": "rerank",
+  "id": "2026-10-01T00-18-06-hybrid",
+  "label": "hybrid (RRF)",
+  "mode": "hybrid",
   "k": 5,
-  "createdAt": "2026-10-01T00:15:18.530Z",
-  "msPerQuestion": 1914,
+  "createdAt": "2026-10-01T00:18:06.026Z",
+  "msPerQuestion": 9,
   "metrics": {
     "n": 41,
     "recallAt1": 0.537,
-    "recallAt3": 0.805,
-    "recallAt5": 0.902,
-    "mrr": 0.685
+    "recallAt3": 0.756,
+    "recallAt5": 0.805,
+    "mrr": 0.645
   },
   "results": [
     {
@@ -19,10 +19,10 @@
       "rank": 1,
       "retrieved": [
         "guides/query-cancellation.md:160-189",
-        "guides/query-cancellation.md:6-8",
-        "guides/migrating-to-react-query-4.md:297-299",
-        "guides/query-cancellation.md:45-62",
-        "guides/query-cancellation.md:191-207"
+        "guides/disabling-queries.md:6-19",
+        "guides/query-cancellation.md:191-207",
+        "guides/query-invalidation.md:26-57",
+        "guides/query-cancellation.md:6-8"
       ]
     },
     {
@@ -30,21 +30,21 @@
       "rank": 1,
       "retrieved": [
         "guides/query-cancellation.md:10-14",
-        "guides/migrating-to-react-query-4.md:200-216",
-        "guides/query-cancellation.md:6-8",
         "guides/disabling-queries.md:6-19",
-        "guides/migrating-to-react-query-4.md:115-124"
+        "guides/query-cancellation.md:160-189",
+        "guides/advanced-ssr.md:352-362",
+        "guides/request-waterfalls.md:102-126"
       ]
     },
     {
       "id": "cancel-fetch",
-      "rank": 1,
+      "rank": 2,
       "retrieved": [
-        "guides/query-cancellation.md:16-43",
         "guides/query-functions.md:100-119",
+        "guides/query-cancellation.md:16-43",
         "guides/query-cancellation.md:160-189",
-        "guides/query-cancellation.md:6-8",
-        "guides/query-cancellation.md:64-93"
+        "guides/filters.md:26-44",
+        "reference/functions/experimental_streamedQuery.md:75-77"
       ]
     },
     {
@@ -52,21 +52,21 @@
       "rank": null,
       "retrieved": [
         "guides/migrating-to-react-query-3.md:332-335",
-        "guides/migrating-to-react-query-3.md:328-330",
-        "guides/initial-query-data.md:32-65",
-        "guides/important-defaults.md:24-37",
-        "guides/migrating-to-react-query-4.md:200-216"
+        "guides/disabling-queries.md:6-19",
+        "guides/advanced-ssr.md:352-362",
+        "guides/request-waterfalls.md:102-126",
+        "guides/query-invalidation.md:6-24"
       ]
     },
     {
       "id": "gc-default",
-      "rank": 1,
+      "rank": null,
       "retrieved": [
-        "guides/important-defaults.md:24-37",
         "guides/migrating-to-react-query-4.md:322-328",
         "guides/caching.md:26-32",
-        "guides/caching.md:31-33",
-        "guides/migrating-to-react-query-4.md:438-440"
+        "guides/migrating-to-react-query-4.md:438-440",
+        "guides/query-invalidation.md:6-24",
+        "guides/caching.md:19-27"
       ]
     },
     {
@@ -74,21 +74,21 @@
       "rank": 3,
       "retrieved": [
         "guides/query-retries.md:6-33",
-        "guides/query-retries.md:33-35",
-        "guides/important-defaults.md:24-37",
         "guides/query-retries.md:37-80",
-        "guides/ssr.md:452-485"
+        "guides/important-defaults.md:24-37",
+        "guides/testing.md:58-76",
+        "guides/query-retries.md:82-105"
       ]
     },
     {
       "id": "retry-delay",
-      "rank": 2,
+      "rank": 1,
       "retrieved": [
-        "guides/important-defaults.md:24-37",
         "guides/query-retries.md:37-80",
-        "guides/migrating-to-v5.md:446-473",
+        "guides/query-retries.md:82-105",
+        "guides/testing.md:58-76",
         "guides/query-retries.md:6-33",
-        "guides/query-retries.md:33-35"
+        "guides/migrating-to-v5.md:379-381"
       ]
     },
     {
@@ -97,20 +97,20 @@
       "retrieved": [
         "guides/query-keys.md:77-96",
         "guides/query-keys.md:27-49",
-        "guides/query-invalidation.md:26-57",
+        "guides/query-keys.md:51-75",
         "guides/query-functions.md:77-98",
-        "guides/mutations.md:291-340"
+        "guides/migrating-to-react-query-4.md:59-70"
       ]
     },
     {
       "id": "keys-hash",
-      "rank": 1,
+      "rank": 2,
       "retrieved": [
-        "guides/query-keys.md:51-75",
         "guides/filters.md:26-44",
-        "guides/filters.md:8-26",
-        "guides/migrating-to-v5.md:133-139",
-        "guides/query-keys.md:6-6"
+        "guides/query-keys.md:51-75",
+        "guides/query-keys.md:77-96",
+        "guides/migrating-to-react-query-4.md:59-70",
+        "comparison.md:70-72"
       ]
     },
     {
@@ -119,9 +119,9 @@
       "retrieved": [
         "guides/query-keys.md:77-96",
         "guides/query-functions.md:77-98",
-        "reference/functions/useQueries.md:8-25",
         "guides/query-functions.md:100-119",
-        "comparison.md:70-72"
+        "guides/migrating-to-react-query-3.md:125-141",
+        "guides/default-query-function.md:6-56"
       ]
     },
     {
@@ -129,10 +129,10 @@
       "rank": null,
       "retrieved": [
         "guides/filters.md:26-44",
-        "guides/queries.md:37-59",
         "guides/disabling-queries.md:6-19",
-        "guides/disabling-queries.md:19-55",
-        "guides/request-waterfalls.md:102-126"
+        "guides/queries.md:37-59",
+        "comparison.md:64-66",
+        "guides/query-cancellation.md:209-215"
       ]
     },
     {
@@ -140,54 +140,54 @@
       "rank": 1,
       "retrieved": [
         "guides/disabling-queries.md:6-19",
-        "guides/query-cancellation.md:160-189",
-        "guides/query-cancellation.md:6-8",
-        "guides/migrating-to-react-query-3.md:125-141",
+        "guides/disabling-queries.md:96-126",
+        "guides/filters.md:26-44",
+        "guides/disabling-queries.md:19-55",
         "guides/query-keys.md:77-96"
       ]
     },
     {
       "id": "skiptoken",
-      "rank": 2,
+      "rank": 1,
       "retrieved": [
-        "guides/disabling-queries.md:6-19",
         "guides/disabling-queries.md:96-126",
+        "typescript.md:269-274",
+        "guides/disabling-queries.md:6-19",
         "reference/functions/useQuery.md:287-314",
-        "reference/functions/useInfiniteQuery.md:409-443",
-        "reference/functions/infiniteQueryOptions.md:223-226"
+        "reference/functions/useInfiniteQuery.md:409-443"
       ]
     },
     {
       "id": "parallel-dynamic",
-      "rank": 5,
+      "rank": 2,
       "retrieved": [
         "guides/parallel-queries.md:8-29",
+        "guides/parallel-queries.md:31-63",
         "guides/migrating-to-react-query-3.md:464-482",
         "reference/functions/useQueries.md:8-25",
-        "guides/parallel-queries.md:6-6",
-        "guides/parallel-queries.md:31-63"
+        "guides/queries.md:37-59"
       ]
     },
     {
       "id": "pagination",
       "rank": 2,
       "retrieved": [
-        "reference/functions/useQuery.md:337-370",
+        "guides/infinite-queries.md:192-205",
         "guides/paginated-queries.md:35-87",
-        "reference/functions/useInfiniteQuery.md:331-369",
-        "reference/functions/useInfiniteQuery.md:171-209",
-        "reference/functions/useInfiniteQuery.md:209-249"
+        "guides/infinite-queries.md:140-157",
+        "comparison.md:64-66",
+        "reference/functions/useInfiniteQuery.md:171-209"
       ]
     },
     {
       "id": "infinite-basic",
-      "rank": 3,
+      "rank": null,
       "retrieved": [
         "reference/functions/useInfiniteQuery.md:171-209",
         "reference/functions/useInfiniteQuery.md:331-369",
-        "guides/infinite-queries.md:45-98",
         "reference/functions/useInfiniteQuery.md:409-443",
-        "guides/infinite-queries.md:6-20"
+        "guides/infinite-queries.md:6-20",
+        "reference/functions/useInfiniteQuery.md:209-249"
       ]
     },
     {
@@ -196,9 +196,9 @@
       "retrieved": [
         "guides/infinite-queries.md:122-138",
         "guides/migrating-to-react-query-3.md:169-196",
-        "guides/migrating-to-v5.md:508-516",
-        "reference/functions/infiniteQueryOptions.md:36-38",
-        "reference/functions/infiniteQueryOptions.md:120-122"
+        "guides/migrating-to-react-query-3.md:196-232",
+        "guides/infinite-queries.md:192-205",
+        "guides/infinite-queries.md:161-172"
       ]
     },
     {
@@ -207,20 +207,20 @@
       "retrieved": [
         "guides/infinite-queries.md:118-120",
         "guides/migrating-to-v5.md:508-516",
-        "guides/infinite-queries.md:207-231",
+        "guides/disabling-queries.md:6-19",
         "guides/migrating-to-v5.md:338-344",
-        "guides/migrating-to-react-query-4.md:186-200"
+        "guides/infinite-queries.md:207-231"
       ]
     },
     {
       "id": "initial-data",
       "rank": 1,
       "retrieved": [
-        "guides/initial-query-data.md:14-30",
-        "guides/initial-query-data.md:65-83",
-        "guides/initial-query-data.md:83-87",
+        "guides/initial-query-data.md:105-122",
         "guides/initial-query-data.md:124-141",
-        "guides/initial-query-data.md:143-169"
+        "guides/initial-query-data.md:143-169",
+        "guides/initial-query-data.md:14-30",
+        "guides/placeholder-query-data.md:6-19"
       ]
     },
     {
@@ -229,9 +229,9 @@
       "retrieved": [
         "guides/initial-query-data.md:105-122",
         "guides/initial-query-data.md:14-30",
-        "guides/initial-query-data.md:89-103",
         "guides/initial-query-data.md:124-141",
-        "guides/initial-query-data.md:143-169"
+        "guides/initial-query-data.md:143-169",
+        "guides/initial-query-data.md:89-103"
       ]
     },
     {
@@ -239,87 +239,87 @@
       "rank": 1,
       "retrieved": [
         "guides/placeholder-query-data.md:6-19",
-        "guides/migrating-to-v5.md:274-292",
-        "guides/initial-query-data.md:171-175",
-        "guides/placeholder-query-data.md:97-101",
-        "guides/initial-query-data.md:14-30"
+        "guides/placeholder-query-data.md:71-95",
+        "guides/placeholder-query-data.md:55-69",
+        "guides/initial-query-data.md:14-30",
+        "guides/initial-query-data.md:171-175"
       ]
     },
     {
       "id": "invalidate-after-mutation",
-      "rank": 2,
+      "rank": 3,
       "retrieved": [
-        "guides/optimistic-updates.md:129-182",
-        "guides/invalidations-from-mutations.md:6-20",
+        "guides/mutations.md:291-340",
         "guides/optimistic-updates.md:92-127",
-        "guides/optimistic-updates.md:40-59",
-        "guides/optimistic-updates.md:8-40"
+        "guides/invalidations-from-mutations.md:6-20",
+        "guides/optimistic-updates.md:129-182",
+        "guides/updates-from-mutation-responses.md:6-54"
       ]
     },
     {
       "id": "invalidate-matching",
-      "rank": 4,
+      "rank": 1,
       "retrieved": [
-        "guides/query-invalidation.md:6-24",
-        "guides/invalidations-from-mutations.md:6-20",
-        "guides/invalidations-from-mutations.md:20-51",
         "guides/query-invalidation.md:57-102",
-        "guides/query-invalidation.md:26-57"
+        "guides/query-invalidation.md:26-57",
+        "guides/query-invalidation.md:102-133",
+        "guides/query-keys.md:51-75",
+        "guides/query-keys.md:27-49"
       ]
     },
     {
       "id": "update-from-response",
-      "rank": 4,
+      "rank": 1,
       "retrieved": [
-        "guides/updates-from-mutation-responses.md:56-84",
-        "guides/optimistic-updates.md:6-6",
-        "guides/optimistic-updates.md:86-90",
         "guides/updates-from-mutation-responses.md:6-54",
-        "guides/optimistic-updates.md:92-127"
+        "guides/optimistic-updates.md:92-127",
+        "guides/optimistic-updates.md:129-182",
+        "guides/optimistic-updates.md:86-90",
+        "guides/initial-query-data.md:143-169"
       ]
     },
     {
       "id": "optimistic-cache",
-      "rank": 2,
+      "rank": 1,
       "retrieved": [
-        "guides/optimistic-updates.md:86-90",
         "guides/optimistic-updates.md:92-127",
+        "guides/optimistic-updates.md:86-90",
         "guides/optimistic-updates.md:129-182",
-        "guides/optimistic-updates.md:6-6",
-        "guides/migrating-to-v5.md:479-506"
+        "guides/optimistic-updates.md:61-84",
+        "guides/mutations.md:291-340"
       ]
     },
     {
       "id": "optimistic-ui",
       "rank": null,
       "retrieved": [
-        "guides/migrating-to-v5.md:479-506",
-        "guides/optimistic-updates.md:184-190",
         "guides/optimistic-updates.md:86-90",
-        "guides/optimistic-updates.md:6-6",
-        "guides/optimistic-updates.md:92-127"
+        "guides/optimistic-updates.md:129-182",
+        "guides/optimistic-updates.md:92-127",
+        "guides/migrating-to-v5.md:479-506",
+        "guides/optimistic-updates.md:184-190"
       ]
     },
     {
       "id": "mutation-reset",
-      "rank": 1,
+      "rank": 2,
       "retrieved": [
-        "guides/mutations.md:102-135",
         "guides/mutations.md:48-60",
-        "guides/optimistic-updates.md:40-59",
-        "reference/functions/useMutationState.md:8-16",
-        "guides/mutations.md:291-340"
+        "guides/mutations.md:102-135",
+        "guides/mutations.md:345-353",
+        "guides/filters.md:46-72",
+        "guides/optimistic-updates.md:40-59"
       ]
     },
     {
       "id": "mutation-side-effects",
-      "rank": 2,
+      "rank": 1,
       "retrieved": [
+        "guides/mutations.md:137-169",
         "reference/functions/useMutation.md:50-58",
         "guides/mutations.md:169-187",
-        "guides/mutations.md:137-169",
-        "guides/mutations.md:218-245",
-        "reference/functions/useMutation.md:8-15"
+        "reference/functions/useMutation.md:8-15",
+        "reference/functions/useMutation.md:90-132"
       ]
     },
     {
@@ -327,10 +327,10 @@
       "rank": 1,
       "retrieved": [
         "guides/mutations.md:397-413",
-        "guides/optimistic-updates.md:61-84",
-        "guides/mutations.md:48-60",
+        "guides/mutations.md:218-245",
         "guides/mutations.md:169-187",
-        "guides/mutations.md:60-69"
+        "guides/optimistic-updates.md:61-84",
+        "guides/mutations.md:102-135"
       ]
     },
     {
@@ -339,20 +339,20 @@
       "retrieved": [
         "guides/network-mode.md:32-36",
         "plugins/createPersister.md:68-70",
+        "guides/network-mode.md:42-46",
         "guides/migrating-to-react-query-4.md:157-174",
-        "guides/network-mode.md:24-30",
-        "guides/network-mode.md:10-22"
+        "guides/polling.md:80-97"
       ]
     },
     {
       "id": "polling",
-      "rank": 1,
+      "rank": null,
       "retrieved": [
-        "guides/polling.md:6-20",
         "guides/polling.md:22-42",
-        "guides/polling.md:99-103",
-        "guides/polling.md:44-59",
-        "guides/queries.md:37-59"
+        "guides/parallel-queries.md:31-63",
+        "guides/filters.md:26-44",
+        "comparison.md:64-66",
+        "guides/disabling-queries.md:6-19"
       ]
     },
     {
@@ -361,31 +361,31 @@
       "retrieved": [
         "guides/polling.md:44-59",
         "guides/query-retries.md:82-105",
-        "guides/polling.md:80-97",
         "guides/polling.md:61-78",
-        "guides/request-waterfalls.md:50-52"
+        "guides/polling.md:80-97",
+        "guides/polling.md:22-42"
       ]
     },
     {
       "id": "window-focus",
-      "rank": 2,
+      "rank": 3,
       "retrieved": [
         "guides/window-focus-refetching.md:107-111",
-        "guides/window-focus-refetching.md:6-6",
-        "guides/window-focus-refetching.md:68-89",
         "guides/window-focus-refetching.md:43-66",
-        "guides/migrating-to-react-query-4.md:200-216"
+        "guides/window-focus-refetching.md:6-6",
+        "guides/migrating-to-v5.md:306-308",
+        "guides/window-focus-refetching.md:8-27"
       ]
     },
     {
       "id": "select",
-      "rank": 2,
+      "rank": 4,
       "retrieved": [
         "guides/migrating-to-react-query-3.md:447-462",
+        "guides/filters.md:26-44",
+        "guides/placeholder-query-data.md:55-69",
         "guides/render-optimizations.md:26-46",
-        "guides/migrating-to-v5.md:145-154",
-        "guides/query-options.md:6-52",
-        "guides/query-keys.md:77-96"
+        "guides/migrating-to-react-query-4.md:218-241"
       ]
     },
     {
@@ -393,10 +393,10 @@
       "rank": 1,
       "retrieved": [
         "guides/render-optimizations.md:18-24",
+        "guides/advanced-ssr.md:352-362",
         "guides/render-optimizations.md:26-46",
-        "guides/render-optimizations.md:6-6",
-        "guides/migrating-to-react-query-3.md:343-371",
-        "comparison.md:68-68"
+        "comparison.md:68-68",
+        "guides/advanced-ssr.md:362-370"
       ]
     },
     {
@@ -404,10 +404,10 @@
       "rank": 1,
       "retrieved": [
         "guides/prefetching.md:85-113",
-        "guides/prefetching.md:394-396",
-        "guides/advanced-ssr.md:376-380",
         "guides/prefetching.md:198-224",
-        "guides/prefetching.md:335-374"
+        "guides/prefetching.md:39-63",
+        "guides/prefetching.md:224-265",
+        "guides/advanced-ssr.md:106-161"
       ]
     },
     {
@@ -415,10 +415,10 @@
       "rank": 5,
       "retrieved": [
         "guides/advanced-ssr.md:160-206",
-        "guides/advanced-ssr.md:106-161",
-        "guides/ssr.md:172-174",
-        "guides/advanced-ssr.md:314-318",
-        "guides/ssr.md:220-272"
+        "guides/advanced-ssr.md:206-225",
+        "guides/advanced-ssr.md:102-104",
+        "guides/advanced-ssr.md:285-298",
+        "guides/ssr.md:188-220"
       ]
     },
     {
@@ -427,31 +427,31 @@
       "retrieved": [
         "guides/suspense.md:58-93",
         "guides/suspense.md:93-119",
-        "reference/functions/useSuspenseQueries.md:70-120",
+        "guides/suspense.md:6-25",
         "reference/functions/useSuspenseQueries.md:279-329",
-        "reference/functions/useSuspenseQuery.md:66-116"
+        "reference/functions/useSuspenseQueries.md:70-120"
       ]
     },
     {
       "id": "testing-retries",
-      "rank": 1,
+      "rank": null,
       "retrieved": [
-        "guides/testing.md:58-76",
         "guides/query-retries.md:6-33",
+        "guides/queries.md:37-59",
+        "guides/testing.md:23-56",
         "guides/migrating-to-react-query-4.md:413-422",
-        "guides/query-retries.md:37-80",
-        "guides/query-retries.md:33-35"
+        "guides/query-invalidation.md:6-24"
       ]
     },
     {
       "id": "v5-single-signature",
       "rank": null,
       "retrieved": [
-        "guides/migrating-to-v5.md:250-274",
-        "reference/functions/useQuery.md:142-188",
-        "guides/default-query-function.md:6-56",
+        "reference/functions/useQueries.md:84-100",
+        "guides/query-keys.md:77-96",
+        "guides/migrating-to-react-query-3.md:125-141",
         "reference/functions/useQueries.md:8-25",
-        "reference/functions/queryOptions.md:117-121"
+        "reference/functions/useQueries.md:126-164"
       ]
     },
     {
@@ -460,9 +460,9 @@
       "retrieved": [
         "guides/migrating-to-v5.md:141-143",
         "guides/migrating-to-react-query-4.md:268-279",
-        "plugins/persistQueryClient.md:211-225",
         "reference/functions/useQuery.md:337-370",
-        "guides/migrating-to-v5.md:145-154"
+        "reference/functions/useQuery.md:314-337",
+        "reference/functions/useQuery.md:243-287"
       ]
     }
   ]

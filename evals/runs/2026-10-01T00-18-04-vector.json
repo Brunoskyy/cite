@@ -1,17 +1,17 @@
 {
   "kind": "retrieval",
-  "id": "2026-10-01T00-13-49-vector",
+  "id": "2026-10-01T00-18-04-vector",
   "label": "vector",
   "mode": "vector",
   "k": 5,
-  "createdAt": "2026-10-01T00:13:49.208Z",
+  "createdAt": "2026-10-01T00:18:04.938Z",
   "msPerQuestion": 6,
   "metrics": {
     "n": 41,
-    "recallAt1": 0.463,
+    "recallAt1": 0.488,
     "recallAt3": 0.683,
-    "recallAt5": 0.756,
-    "mrr": 0.577
+    "recallAt5": 0.732,
+    "mrr": 0.587
   },
   "results": [
     {
@@ -19,10 +19,10 @@
       "rank": 1,
       "retrieved": [
         "guides/query-cancellation.md:160-189",
-        "guides/infinite-queries.md:159-159",
-        "guides/disabling-queries.md:19-55",
         "guides/query-cancellation.md:45-62",
-        "guides/query-cancellation.md:209-215"
+        "guides/disabling-queries.md:19-55",
+        "guides/query-cancellation.md:209-215",
+        "guides/infinite-queries.md:161-172"
       ]
     },
     {
@@ -74,8 +74,8 @@
       "rank": null,
       "retrieved": [
         "guides/query-retries.md:6-33",
-        "guides/query-retries.md:37-80",
         "guides/query-retries.md:33-35",
+        "guides/query-retries.md:37-80",
         "guides/testing.md:58-76",
         "guides/migrating-to-v5.md:379-381"
       ]
@@ -98,8 +98,8 @@
         "guides/query-keys.md:77-96",
         "guides/query-keys.md:27-49",
         "guides/query-functions.md:77-98",
-        "guides/query-keys.md:8-25",
-        "guides/queries.md:59-121"
+        "guides/queries.md:59-121",
+        "guides/query-keys.md:8-25"
       ]
     },
     {
@@ -107,8 +107,8 @@
       "rank": 1,
       "retrieved": [
         "guides/query-keys.md:51-75",
-        "guides/filters.md:26-44",
         "reference/functions/hashKey.md:25-30",
+        "guides/filters.md:26-44",
         "guides/migrating-to-v5.md:133-139",
         "guides/query-keys.md:77-96"
       ]
@@ -128,11 +128,11 @@
       "id": "dependent",
       "rank": null,
       "retrieved": [
-        "guides/infinite-queries.md:159-159",
+        "guides/query-cancellation.md:209-215",
         "guides/disabling-queries.md:86-94",
         "reference/functions/useSuspenseInfiniteQuery.md:64-71",
         "guides/infinite-queries.md:22-43",
-        "guides/query-cancellation.md:209-215"
+        "guides/infinite-queries.md:97-116"
       ]
     },
     {
@@ -142,7 +142,7 @@
         "guides/disabling-queries.md:19-55",
         "guides/disabling-queries.md:6-19",
         "guides/query-cancellation.md:160-189",
-        "guides/infinite-queries.md:159-159",
+        "guides/query-cancellation.md:209-215",
         "guides/disabling-queries.md:57-84"
       ]
     },
@@ -153,17 +153,17 @@
         "reference/functions/queryOptions.md:201-203",
         "guides/disabling-queries.md:96-126",
         "typescript.md:269-274",
-        "guides/disabling-queries.md:6-19",
+        "reference/functions/infiniteQueryOptions.md:223-226",
         "reference/functions/useQuery.md:287-314"
       ]
     },
     {
       "id": "parallel-dynamic",
-      "rank": 3,
+      "rank": 2,
       "retrieved": [
         "guides/parallel-queries.md:6-6",
-        "guides/parallel-queries.md:8-29",
         "guides/parallel-queries.md:31-63",
+        "guides/parallel-queries.md:8-29",
         "reference/functions/useSuspenseInfiniteQuery.md:64-71",
         "guides/migrating-to-react-query-3.md:464-482"
       ]
@@ -185,8 +185,8 @@
       "retrieved": [
         "reference/functions/useInfiniteQuery.md:171-209",
         "reference/functions/useInfiniteQuery.md:331-369",
-        "reference/functions/usePrefetchInfiniteQuery.md:50-50",
         "reference/functions/usePrefetchInfiniteQuery.md:65-69",
+        "reference/functions/useInfiniteQuery.md:152-159",
         "reference/functions/useInfiniteQuery.md:312-319"
       ]
     },
@@ -247,13 +247,13 @@
     },
     {
       "id": "invalidate-after-mutation",
-      "rank": 4,
+      "rank": null,
       "retrieved": [
         "guides/optimistic-updates.md:40-59",
         "guides/mutations.md:102-135",
         "guides/optimistic-updates.md:92-127",
-        "guides/invalidations-from-mutations.md:6-20",
-        "guides/mutations.md:291-340"
+        "guides/mutations.md:291-340",
+        "guides/optimistic-updates.md:129-182"
       ]
     },
     {
@@ -295,9 +295,9 @@
       "retrieved": [
         "guides/optimistic-updates.md:86-90",
         "guides/optimistic-updates.md:129-182",
+        "guides/optimistic-updates.md:184-190",
         "guides/optimistic-updates.md:92-127",
-        "guides/optimistic-updates.md:6-6",
-        "guides/optimistic-updates.md:184-190"
+        "guides/optimistic-updates.md:6-6"
       ]
     },
     {
@@ -307,8 +307,8 @@
         "guides/mutations.md:102-135",
         "guides/mutations.md:48-60",
         "guides/optimistic-updates.md:40-59",
-        "guides/mutations.md:60-69",
-        "reference/functions/useMutationState.md:8-16"
+        "reference/functions/useMutationState.md:8-16",
+        "guides/mutations.md:60-69"
       ]
     },
     {
@@ -330,7 +330,7 @@
         "guides/mutations.md:218-245",
         "guides/mutations.md:169-187",
         "guides/optimistic-updates.md:61-84",
-        "guides/mutations.md:339-343"
+        "reference/functions/matchMutation.md:30-38"
       ]
     },
     {
@@ -361,9 +361,9 @@
       "retrieved": [
         "guides/polling.md:44-59",
         "guides/polling.md:61-78",
-        "guides/query-retries.md:82-105",
         "guides/polling.md:80-97",
-        "guides/polling.md:6-20"
+        "guides/query-retries.md:82-105",
+        "guides/polling.md:22-42"
       ]
     },
     {
@@ -401,10 +401,10 @@
     },
     {
       "id": "prefetch-hover",
-      "rank": 2,
+      "rank": 1,
       "retrieved": [
-        "guides/prefetching.md:224-265",
         "guides/prefetching.md:85-113",
+        "guides/prefetching.md:224-265",
         "guides/prefetching.md:192-198",
         "guides/prefetching.md:265-286",
         "guides/prefetching.md:158-192"
@@ -418,7 +418,7 @@
         "guides/advanced-ssr.md:160-206",
         "guides/ssr.md:172-174",
         "guides/advanced-ssr.md:285-298",
-        "guides/advanced-ssr.md:106-161"
+        "guides/ssr.md:176-182"
       ]
     },
     {
@@ -427,8 +427,8 @@
       "retrieved": [
         "guides/suspense.md:58-93",
         "guides/suspense.md:93-119",
-        "reference/functions/useSuspenseQueries.md:70-120",
         "reference/functions/useSuspenseQueries.md:279-329",
+        "reference/functions/useSuspenseQueries.md:70-120",
         "reference/functions/useSuspenseInfiniteQuery.md:79-142"
       ]
     },
@@ -447,11 +447,11 @@
       "id": "v5-single-signature",
       "rank": null,
       "retrieved": [
-        "reference/functions/useQueries.md:37-37",
         "reference/functions/useQuery.md:60-62",
         "reference/functions/useQuery.md:138-140",
         "reference/functions/useQuery.md:239-241",
-        "reference/functions/useQuery.md:37-37"
+        "reference/functions/useQueries.md:41-46",
+        "reference/functions/queryOptions.md:117-121"
       ]
     },
     {

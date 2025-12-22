@@ -89,6 +89,14 @@ describe('chunkMarkdown', () => {
     }
   })
 
+  it('skips sections that are only a heading', () => {
+    const parts = chunkMarkdown(
+      'r.md',
+      ['# R', '## Parameters', "[//]: # 'x'", '', '### mutation', 'The mutation.'].join('\n'),
+    )
+    expect(parts.map((c) => c.headings.join(' > '))).toEqual(['Parameters > mutation'])
+  })
+
   it('falls back to the first H1, then the file name, for the title', () => {
     expect(chunkMarkdown('a/b.md', '# Hello\n\ntext')[0]!.title).toBe('Hello')
     expect(chunkMarkdown('a/b.md', 'text only')[0]!.title).toBe('b')

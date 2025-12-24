@@ -1,0 +1,488 @@
+[
+  {
+    "question": "How do I cancel a query manually?",
+    "passages": [
+      {
+        "id": 1376,
+        "file": "guides/query-cancellation.md",
+        "title": "Query Cancellation",
+        "headings": ["Manual Cancellation"],
+        "startLine": 160,
+        "endLine": 189,
+        "text": "## Manual Cancellation\n\nYou might want to cancel a query manually. For example, if the request takes a long time to finish, you can allow the user to click a cancel button to stop the request. To do this, you just need to call `queryClient.cancelQueries({ queryKey })`, which will cancel the query and revert it back to its previous state. If you have consumed the `signal` passed to the query function, TanStack Query will additionally also cancel the Promise.\n\n[//]: # 'Example7'\n\n```tsx\nconst query = useQuery({\n  queryKey: ['todos'],\n  queryFn: async ({ signal }) => {\n    const resp = await fetch('/todos', { signal })\n    return resp.json()\n  },\n})\n\nconst queryClient = useQueryClient()\n\nreturn (\n  <button\n    onClick={(e) => {\n      e.preventDefault()\n      queryClient.cancelQueries({ queryKey: ['todos'] })\n    }}\n  >\n    Cancel\n  </button>\n)\n```\n\n[//]: # 'Example7'"
+      },
+      {
+        "id": 1368,
+        "file": "guides/query-cancellation.md",
+        "title": "Query Cancellation",
+        "headings": [],
+        "startLine": 6,
+        "endLine": 8,
+        "text": "TanStack Query provides each query function with an [`AbortSignal` instance](https://developer.mozilla.org/docs/Web/API/AbortSignal). When a query becomes out-of-date or inactive, this `signal` will become aborted. This means that all queries are cancellable, and you can respond to the cancellation inside your query function if desired. The best part about this is that it allows you to continue to use normal async/await syntax while getting all the benefits of automatic cancellation.\n\nThe `AbortController` API is available in [most runtime environments](https://developer.mozilla.org/docs/Web/API/AbortController#browser_compatibility), but if your runtime environment does not support it, you will need to provide a polyfill. There are [several available](https://www.npmjs.com/search?q=abortcontroller%20polyfill)."
+      },
+      {
+        "id": 1371,
+        "file": "guides/query-cancellation.md",
+        "title": "Query Cancellation",
+        "headings": ["Using axios [v0.22.0+](https://github.com/axios/axios/releases/tag/v0.22.0)"],
+        "startLine": 45,
+        "endLine": 62,
+        "text": "## Using `axios` [v0.22.0+](https://github.com/axios/axios/releases/tag/v0.22.0)\n\n[//]: # 'Example2'\n\n```tsx\nimport axios from 'axios'\n\nconst query = useQuery({\n  queryKey: ['todos'],\n  queryFn: ({ signal }) =>\n    axios.get('/todos', {\n      // Pass the signal to `axios`\n      signal,\n    }),\n})\n```\n\n[//]: # 'Example2'"
+      },
+      {
+        "id": 1216,
+        "file": "guides/migrating-to-react-query-4.md",
+        "title": "Migrating to React Query 4",
+        "headings": ["Breaking Changes", "The cancel method on promises is no longer supported"],
+        "startLine": 297,
+        "endLine": 299,
+        "text": "### The `cancel` method on promises is no longer supported\n\nThe old `cancel` method (which allowed you to define a `cancel` function on promises and was used by the library to support query cancellation) has been removed. We recommend using the [newer API](./query-cancellation.md) (introduced with v3.30.0) for query cancellation, which uses the [`AbortController` API](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) internally and provides you with an [`AbortSignal` instance](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) in your query function to support query cancellation."
+      },
+      {
+        "id": 1377,
+        "file": "guides/query-cancellation.md",
+        "title": "Query Cancellation",
+        "headings": ["Cancel Options"],
+        "startLine": 191,
+        "endLine": 207,
+        "text": "## `Cancel Options`\n\nCancel options are used to control the behavior of query cancellation operations.\n\n```tsx\n// Cancel specific queries silently\nawait queryClient.cancelQueries({ queryKey: ['posts'] }, { silent: true })\n```\n\nA cancel options object supports the following properties:\n\n- `silent?: boolean`\n  - When set to `true`, suppresses propagation of `CancelledError` to observers (e.g., `onError` callbacks) and related notifications, and returns the retry promise instead of rejecting.\n  - Defaults to `false`\n- `revert?: boolean`\n  - When set to `true`, restores the query’s state (data and status) from immediately before the in-flight fetch, sets `fetchStatus` back to `idle`, and only throws if there was no prior data.\n  - Defaults to `true`"
+      },
+      {
+        "id": 1110,
+        "file": "guides/disabling-queries.md",
+        "title": "Disabling/Pausing Queries",
+        "headings": [],
+        "startLine": 6,
+        "endLine": 19,
+        "text": "If you ever want to disable a query from automatically running, you can use the `enabled = false` option. The enabled option also accepts a callback that returns a boolean.\n\nWhen `enabled` is `false`:\n\n- If the query has cached data, then the query will be initialized in the `status === 'success'` or `isSuccess` state.\n- If the query does not have cached data, then the query will start in the `status === 'pending'` and `fetchStatus === 'idle'` state.\n- The query will not automatically fetch on mount.\n- The query will not automatically refetch in the background.\n- The query will ignore query client `invalidateQueries` and `refetchQueries` calls that would normally result in the query refetching.\n- `refetch` returned from `useQuery` can be used to manually trigger the query to fetch. However, it will not work with `skipToken`.\n\n> TypeScript users may prefer to use [skipToken](#typesafe-disabling-of-queries-using-skiptoken) as an alternative to `enabled = false`.\n\n[//]: # 'Example'"
+      }
+    ],
+    "answer": "Call `queryClient.cancelQueries` with the query's key, for example from a Cancel button. It cancels the query and reverts it to the state it had before the fetch started [1]:\n\n```tsx\nconst queryClient = useQueryClient()\n\n<button onClick={() => queryClient.cancelQueries({ queryKey: ['todos'] })}>\n  Cancel\n</button>\n```\n\nFor the request itself to stop, your query function has to use the `signal` it receives, for instance by passing it to `fetch` [1]. Every query function gets an `AbortSignal` that is aborted when the query is cancelled [2], and clients like axios accept it the same way [3].\n\n`cancelQueries` also takes options: `silent: true` keeps the `CancelledError` from reaching observers, and `revert` (on by default) restores the previous data and status [5]."
+  },
+  {
+    "question": "How do I keep showing the previous page while the next page loads?",
+    "passages": [
+      {
+        "id": 1853,
+        "file": "reference/functions/useQuery.md",
+        "title": "useQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 337,
+        "endLine": 370,
+        "text": "  const queryClient = useQueryClient()\n\n  const { data, isError, error } = useQuery({\n    queryKey: ['post', postId],\n    queryFn: () => fetchPost(postId),\n    initialData: () =>\n      queryClient\n        .getQueryData<Array<Post>>(['posts'])\n        ?.find((post) => post.id === postId),\n    initialDataUpdatedAt: () =>\n      queryClient.getQueryState(['posts'])?.dataUpdatedAt,\n  })\n\n  if (isError) return <span>Error: {error.message}</span>\n\n  return <h1>{data?.title}</h1>\n}\n```\n\nPaginated data, keeping the previous page's data visible while the next page loads:\n```tsx\nimport { keepPreviousData, useQuery } from '@tanstack/react-query'\nimport { useState } from 'react'\n\nfunction Posts() {\n  const [page, setPage] = useState(0)\n\n  const { data, isPlaceholderData, isError, error } = useQuery({\n    queryKey: ['posts', page],\n    queryFn: () => fetchPosts(page),\n    placeholderData: keepPreviousData,\n  })\n\n  if (isError) return <span>Error: {error.message}</span>"
+      },
+      {
+        "id": 1321,
+        "file": "guides/paginated-queries.md",
+        "title": "Paginated / Lagged Queries",
+        "headings": ["Better Paginated Queries with placeholderData"],
+        "startLine": 35,
+        "endLine": 87,
+        "text": "```tsx\nimport { keepPreviousData, useQuery } from '@tanstack/react-query'\nimport React from 'react'\n\nfunction Todos() {\n  const [page, setPage] = React.useState(0)\n\n  const fetchProjects = (page = 0) =>\n    fetch('/api/projects?page=' + page).then((res) => res.json())\n\n  const { isPending, isError, error, data, isFetching, isPlaceholderData } =\n    useQuery({\n      queryKey: ['projects', page],\n      queryFn: () => fetchProjects(page),\n      placeholderData: keepPreviousData,\n    })\n\n  return (\n    <div>\n      {isPending ? (\n        <div>Loading...</div>\n      ) : isError ? (\n        <div>Error: {error.message}</div>\n      ) : (\n        <div>\n          {data.projects.map((project) => (\n            <p key={project.id}>{project.name}</p>\n          ))}\n        </div>\n      )}\n      <span>Current Page: {page + 1}</span>\n      <button\n        onClick={() => setPage((old) => Math.max(old - 1, 0))}\n        disabled={page === 0}\n      >\n        Previous Page\n      </button>\n      <button\n        onClick={() => {\n          if (!isPlaceholderData && data.hasMore) {\n            setPage((old) => old + 1)\n          }\n        }}\n        // Disable the Next Page button until we know a next page is available\n        disabled={isPlaceholderData || !data?.hasMore}\n      >\n        Next Page\n      </button>\n      {isFetching ? <span> Loading...</span> : null}\n    </div>\n  )\n}\n```"
+      },
+      {
+        "id": 1737,
+        "file": "reference/functions/useInfiniteQuery.md",
+        "title": "useInfiniteQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 171,
+        "endLine": 209,
+        "text": "### Examples\n\nFetching the next page from a \"Load More\" button click:\n```tsx\nimport { useInfiniteQuery } from '@tanstack/react-query'\n\nfunction Projects() {\n  const { data, isPending, isError, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =\n    useInfiniteQuery({\n      queryKey: ['projects'],\n      queryFn: ({ pageParam }) => fetchProjects(pageParam),\n      initialPageParam: 0,\n      getNextPageParam: (lastPage) => lastPage.nextId,\n    })\n\n  if (isPending) return 'Loading...'\n  if (isError) return <span>Error: {error.message}</span>\n\n  return (\n    <>\n      <ul>\n        {data.pages.map((page) =>\n          page.projects.map((project) => <li key={project.id}>{project.name}</li>),\n        )}\n      </ul>\n      <button\n        onClick={() => fetchNextPage()}\n        disabled={!hasNextPage || isFetching}\n      >\n        {isFetchingNextPage\n          ? 'Loading more...'\n          : hasNextPage\n            ? 'Load More'\n            : 'Nothing more to load'}\n      </button>\n    </>\n  )\n}\n```"
+      },
+      {
+        "id": 1751,
+        "file": "reference/functions/useInfiniteQuery.md",
+        "title": "useInfiniteQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 331,
+        "endLine": 369,
+        "text": "### Examples\n\nFetching the next page from a \"Load More\" button click:\n```tsx\nimport { useInfiniteQuery } from '@tanstack/react-query'\n\nfunction Projects() {\n  const { data, isPending, isError, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =\n    useInfiniteQuery({\n      queryKey: ['projects'],\n      queryFn: ({ pageParam }) => fetchProjects(pageParam),\n      initialPageParam: 0,\n      getNextPageParam: (lastPage) => lastPage.nextId,\n    })\n\n  if (isPending) return 'Loading...'\n  if (isError) return <span>Error: {error.message}</span>\n\n  return (\n    <>\n      <ul>\n        {data.pages.map((page) =>\n          page.projects.map((project) => <li key={project.id}>{project.name}</li>),\n        )}\n      </ul>\n      <button\n        onClick={() => fetchNextPage()}\n        disabled={!hasNextPage || isFetching}\n      >\n        {isFetchingNextPage\n          ? 'Loading more...'\n          : hasNextPage\n            ? 'Load More'\n            : 'Nothing more to load'}\n      </button>\n    </>\n  )\n}\n```"
+      },
+      {
+        "id": 1738,
+        "file": "reference/functions/useInfiniteQuery.md",
+        "title": "useInfiniteQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 209,
+        "endLine": 249,
+        "text": "```\n\nFetching the next page automatically as the user scrolls, using an `IntersectionObserver` on a\nsentinel element after the list:\n```tsx\nimport { useInfiniteQuery } from '@tanstack/react-query'\nimport { useEffect, useRef } from 'react'\n\nfunction Projects() {\n  const {\n    data,\n    isPending,\n    isError,\n    error,\n    fetchNextPage,\n    hasNextPage,\n    isFetching,\n    isFetchingNextPage,\n  } = useInfiniteQuery({\n    queryKey: ['projects'],\n    queryFn: ({ pageParam }) => fetchProjects(pageParam),\n    initialPageParam: 0,\n    getNextPageParam: (lastPage) => lastPage.nextId,\n  })\n\n  const sentinelRef = useRef<HTMLDivElement>(null)\n\n  useEffect(() => {\n    const sentinel = sentinelRef.current\n    if (sentinel == null || !hasNextPage || isFetching) return\n\n    const observer = new IntersectionObserver(([entry]) => {\n      if (entry?.isIntersecting) fetchNextPage()\n    })\n    observer.observe(sentinel)\n\n    return () => observer.disconnect()\n  }, [hasNextPage, isFetching, fetchNextPage])\n\n  if (isPending) return 'Loading...'\n  if (isError) return <span>Error: {error.message}</span>"
+      },
+      {
+        "id": 1752,
+        "file": "reference/functions/useInfiniteQuery.md",
+        "title": "useInfiniteQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 369,
+        "endLine": 409,
+        "text": "```\n\nFetching the next page automatically as the user scrolls, using an `IntersectionObserver` on a\nsentinel element after the list:\n```tsx\nimport { useInfiniteQuery } from '@tanstack/react-query'\nimport { useEffect, useRef } from 'react'\n\nfunction Projects() {\n  const {\n    data,\n    isPending,\n    isError,\n    error,\n    fetchNextPage,\n    hasNextPage,\n    isFetching,\n    isFetchingNextPage,\n  } = useInfiniteQuery({\n    queryKey: ['projects'],\n    queryFn: ({ pageParam }) => fetchProjects(pageParam),\n    initialPageParam: 0,\n    getNextPageParam: (lastPage) => lastPage.nextId,\n  })\n\n  const sentinelRef = useRef<HTMLDivElement>(null)\n\n  useEffect(() => {\n    const sentinel = sentinelRef.current\n    if (sentinel == null || !hasNextPage || isFetching) return\n\n    const observer = new IntersectionObserver(([entry]) => {\n      if (entry?.isIntersecting) fetchNextPage()\n    })\n    observer.observe(sentinel)\n\n    return () => observer.disconnect()\n  }, [hasNextPage, isFetching, fetchNextPage])\n\n  if (isPending) return 'Loading...'\n  if (isError) return <span>Error: {error.message}</span>"
+      }
+    ],
+    "answer": "Pass `placeholderData: keepPreviousData` to `useQuery`. While the query for the new page is fetching, the data from the last page stays on screen instead of falling back to a loading state [1, 2]:\n\n```tsx\nconst { data, isPlaceholderData } = useQuery({\n  queryKey: ['projects', page],\n  queryFn: () => fetchProjects(page),\n  placeholderData: keepPreviousData,\n})\n```\n\n`isPlaceholderData` tells you that what you are showing is the previous page, which is useful for disabling the Next button until the real page arrives [2]."
+  },
+  {
+    "question": "What is skipToken and when should I use it instead of enabled false?",
+    "passages": [
+      {
+        "id": 1110,
+        "file": "guides/disabling-queries.md",
+        "title": "Disabling/Pausing Queries",
+        "headings": [],
+        "startLine": 6,
+        "endLine": 19,
+        "text": "If you ever want to disable a query from automatically running, you can use the `enabled = false` option. The enabled option also accepts a callback that returns a boolean.\n\nWhen `enabled` is `false`:\n\n- If the query has cached data, then the query will be initialized in the `status === 'success'` or `isSuccess` state.\n- If the query does not have cached data, then the query will start in the `status === 'pending'` and `fetchStatus === 'idle'` state.\n- The query will not automatically fetch on mount.\n- The query will not automatically refetch in the background.\n- The query will ignore query client `invalidateQueries` and `refetchQueries` calls that would normally result in the query refetching.\n- `refetch` returned from `useQuery` can be used to manually trigger the query to fetch. However, it will not work with `skipToken`.\n\n> TypeScript users may prefer to use [skipToken](#typesafe-disabling-of-queries-using-skiptoken) as an alternative to `enabled = false`.\n\n[//]: # 'Example'"
+      },
+      {
+        "id": 1114,
+        "file": "guides/disabling-queries.md",
+        "title": "Disabling/Pausing Queries",
+        "headings": ["Typesafe disabling of queries using skipToken"],
+        "startLine": 96,
+        "endLine": 126,
+        "text": "## Typesafe disabling of queries using `skipToken`\n\nIf you are using TypeScript, you can use the `skipToken` to disable a query. This is useful when you want to disable a query based on a condition, but you still want the query to be type safe.\n\n> **IMPORTANT**: `refetch` from `useQuery` will not work with `skipToken`. Calling `refetch()` on a query that uses `skipToken` will result in a `Missing queryFn` error because there is no valid query function to execute. If you need to manually trigger queries, consider using `enabled: false` instead, which allows `refetch()` to work properly. Other than this limitation, `skipToken` works the same as `enabled: false`.\n\n[//]: # 'Example3'\n\n```tsx\nimport { skipToken, useQuery } from '@tanstack/react-query'\n\nfunction Todos() {\n  const [filter, setFilter] = React.useState<string | undefined>()\n\n  const { data } = useQuery({\n    queryKey: ['todos', filter],\n    // ⬇️ disabled as long as the filter is undefined or empty\n    queryFn: filter ? () => fetchTodos(filter) : skipToken,\n  })\n\n  return (\n    <div>\n      // 🚀 applying the filter will enable and execute the query\n      <FiltersForm onApply={setFilter} />\n      {data && <TodosTable data={data} />}\n    </div>\n  )\n}\n```\n\n[//]: # 'Example3'"
+      },
+      {
+        "id": 1851,
+        "file": "reference/functions/useQuery.md",
+        "title": "useQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 287,
+        "endLine": 314,
+        "text": "```\n\nA dependent query, only enabled once `postId` is set — use `isLoading`, not `isPending`, so the\nloading state doesn't show while the query is disabled:\n```tsx\nimport { useQuery } from '@tanstack/react-query'\n\nfunction Post({ postId }: { postId: number | undefined }) {\n  const { data, isLoading, isError, error } = useQuery({\n    queryKey: ['post', postId],\n    queryFn: () => fetchPost(postId!),\n    enabled: postId != null,\n  })\n\n  if (postId == null) return 'Select a post'\n  if (isLoading) return 'Loading...'\n  if (isError) return <span>Error: {error.message}</span>\n\n  return <h1>{data?.title}</h1>\n}\n```\n\nThe same dependent query, type safe: `skipToken` disables the query without needing the\nnon-null assertion above, since `queryFn` is only ever called when `postId` is defined.\n`refetch` doesn't work while `queryFn` is `skipToken` — use `enabled: false` instead if you\nneed to trigger the query manually:\n```tsx\nimport { skipToken, useQuery } from '@tanstack/react-query'"
+      },
+      {
+        "id": 1753,
+        "file": "reference/functions/useInfiniteQuery.md",
+        "title": "useInfiniteQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 409,
+        "endLine": 443,
+        "text": "  if (isError) return <span>Error: {error.message}</span>\n\n  return (\n    <>\n      <ul>\n        {data.pages.map((page) =>\n          page.projects.map((project) => <li key={project.id}>{project.name}</li>),\n        )}\n      </ul>\n      <div ref={sentinelRef}>{isFetchingNextPage ? 'Loading more...' : null}</div>\n    </>\n  )\n}\n```\n\nA query that's disabled, type safe, until `postId` is set — pass `skipToken` as `queryFn`\ninstead of setting `enabled: false`:\n```tsx\nimport { skipToken, useInfiniteQuery } from '@tanstack/react-query'\n\nfunction Comments({ postId }: { postId: string | undefined }) {\n  // Use `isLoading`, not `isPending`, so the loading state doesn't show while the query is disabled.\n  const { data, isLoading, isError, error } = useInfiniteQuery({\n    queryKey: ['post', postId, 'comments'],\n    queryFn:\n      postId != null\n        ? ({ pageParam }) => fetchComments(postId, pageParam)\n        : skipToken,\n    initialPageParam: 0,\n    getNextPageParam: (lastPage) => lastPage.nextId,\n  })\n\n  if (postId == null) return 'Select a post'\n  if (isLoading) return 'Loading...'\n  if (isError) return <span>Error: {error.message}</span>"
+      },
+      {
+        "id": 1625,
+        "file": "reference/functions/infiniteQueryOptions.md",
+        "title": "infiniteQueryOptions",
+        "headings": ["Call Signature", "Remarks"],
+        "startLine": 223,
+        "endLine": 226,
+        "text": "### Remarks\n\nSee [useInfiniteQuery](useInfiniteQuery.md) for examples that fetch further pages (from a button click or\nautomatically as the user scrolls) and that use `skipToken` to disable the query until `postId` is set."
+      },
+      {
+        "id": 1922,
+        "file": "typescript.md",
+        "title": "TypeScript",
+        "headings": ["Typesafe disabling of queries using skipToken"],
+        "startLine": 269,
+        "endLine": 274,
+        "text": "## Typesafe disabling of queries using `skipToken`\n\nIf you are using TypeScript, you can use the `skipToken` to disable a query. This is useful when you want to disable a query based on a condition, but you still want to keep the query to be type safe.\nRead more about it in the [Disabling Queries](./guides/disabling-queries.md) guide.\n\n[//]: # 'Materials'"
+      }
+    ],
+    "answer": "`skipToken` is a type-safe way to disable a query: pass it as the `queryFn` while a condition is not met, and the query does not run [2]. Because the real query function is only used when its inputs exist, you don't need a non-null assertion like `fetchPost(postId!)` [3]:\n\n```tsx\nqueryFn: filter ? () => fetchTodos(filter) : skipToken\n```\n\nApart from one limitation, it behaves the same as `enabled: false` [2]. That limitation is the reason to choose one over the other: `refetch()` does not work with `skipToken` and throws a `Missing queryFn` error, so if you need to trigger the query manually, use `enabled: false` instead [1, 2]."
+  },
+  {
+    "question": "How do I prefetch data when the user hovers over a link?",
+    "passages": [
+      {
+        "id": 1345,
+        "file": "guides/prefetching.md",
+        "title": "Prefetching & Router Integration",
+        "headings": ["Prefetch in event handlers"],
+        "startLine": 85,
+        "endLine": 113,
+        "text": "## Prefetch in event handlers\n\nA straightforward form of prefetching is doing it when the user interacts with something. In this example we'll use `queryClient.query` to start a prefetch on `onMouseEnter` or `onFocus`.\n\n[//]: # 'ExampleEventHandler'\n\n```tsx\nfunction ShowDetailsButton() {\n  const queryClient = useQueryClient()\n\n  const prefetch = () => {\n    void queryClient.query({\n      queryKey: ['details'],\n      queryFn: getDetailsData,\n      // Prefetch only fires when data is older than the staleTime,\n      // so in a case like this you definitely want to set one\n      staleTime: 60000,\n    }).catch(noop)\n  }\n\n  return (\n    <button onMouseEnter={prefetch} onFocus={prefetch} onClick={...}>\n      Show Details\n    </button>\n  )\n}\n```\n\n[//]: # 'ExampleEventHandler'"
+      },
+      {
+        "id": 1357,
+        "file": "guides/prefetching.md",
+        "title": "Prefetching & Router Integration",
+        "headings": ["Router Integration"],
+        "startLine": 394,
+        "endLine": 396,
+        "text": "When integrating at the router level, you can choose to either _block_ rendering of that route until all data is present, or you can start a prefetch but not await the result. That way, you can start rendering the route as soon as possible. You can also mix these two approaches and await some critical data, but start rendering before all the secondary data has finished loading. In this example, we'll configure an `/article` route to not render until the article data has finished loading, as well as start prefetching comments as soon as possible, but not block rendering the route if comments haven't finished loading yet.\n\nNote that many route loaders use error boundaries to trigger error fallbacks. Whereas up to now we have been using `.catch(noop)` to ignore errors for data that will be retried by `useQuery`, for critical data that the route will not work without, you should `await` the promise without `noop` and handle the error in a `try` block or the router's error handling (such as TanStack Router's `errorComponent`)."
+      },
+      {
+        "id": 1087,
+        "file": "guides/advanced-ssr.md",
+        "title": "Advanced Server Rendering",
+        "headings": ["Streaming with Server Components"],
+        "startLine": 376,
+        "endLine": 380,
+        "text": "With the prefetching patterns described above, React Query is perfectly compatible with this form of streaming. As the data for each Suspense boundary resolves, Next.js can render and stream the finished content to the browser. This works even if you are using `useQuery` as outlined above because the suspending actually happens when you `await` the prefetch.\n\nAs of React Query v5.40.0, you don't have to `await` all prefetches for this to work, as `pending` Queries can also be dehydrated and sent to the client. This lets you kick off prefetches as early as possible without letting them block an entire Suspense boundary, and streams the _data_ to the client as the query finishes. This can be useful for example if you want to prefetch some content that is only visible after some user interaction, or say if you want to `await` and render the first page of an infinite query, but start prefetching page 2 without blocking rendering.\n\nTo make this work, we have to instruct the `queryClient` to also `dehydrate` pending Queries. We can do this globally, or by passing that option directly to `dehydrate`."
+      },
+      {
+        "id": 1799,
+        "file": "reference/functions/usePrefetchQuery.md",
+        "title": "usePrefetchQuery",
+        "headings": [],
+        "startLine": 8,
+        "endLine": 21,
+        "text": "```ts\nfunction usePrefetchQuery<TQueryFnData, TError, TData, TQueryData, TQueryKey>(options: UsePrefetchQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>, queryClient?: QueryClient): void;\n```\n\nDefined in: [packages/react-query/src/usePrefetchQuery.tsx:42](https://github.com/TanStack/query/blob/main/packages/react-query/src/usePrefetchQuery.tsx#L42)\n\n`usePrefetchQuery` does not return anything, it should be used just to fire a prefetch during render, before\na suspense boundary that wraps a component that uses `useSuspenseQuery`. You can pass everything to\n`usePrefetchQuery` that you can pass to `queryClient.query`, though `queryKey` is always required, and\n`queryFn` is required unless a default query function has been defined.\n\nThe prefetch is skipped if the query already has any cached state — including a `pending`/`error` state left\nover from a previous attempt — so calling this on every render is cheap and won't refetch data that's\nalready there or already in flight."
+      },
+      {
+        "id": 1353,
+        "file": "guides/prefetching.md",
+        "title": "Prefetching & Router Integration",
+        "headings": ["Prefetch in components", "Dependent Queries & Code Splitting"],
+        "startLine": 335,
+        "endLine": 374,
+        "text": "As noted over in that guide, this example leads to the following double request waterfall:\n\n```\n1. |> getFeed()\n2.   |> JS for <GraphFeedItem>\n3.     |> getGraphDataById()\n```\n\nIf we can not restructure our API so `getFeed()` also returns the `getGraphDataById()` data when necessary, there is no way to get rid of the `getFeed->getGraphDataById` waterfall, but by leveraging conditional prefetching, we can at least load the code and data in parallel. Just like described above, there are multiple ways to do this, but for this example, we'll do it in the query function:\n\n[//]: # 'ExampleConditionally2'\n\n```tsx\nfunction Feed() {\n  const queryClient = useQueryClient()\n  const { data, isPending } = useQuery({\n    queryKey: ['feed'],\n    queryFn: async (...args) => {\n      const feed = await getFeed(...args)\n\n      for (const feedItem of feed) {\n        if (feedItem.type === 'GRAPH') {\n          void queryClient.query({\n            queryKey: ['graph', feedItem.id],\n            queryFn: getGraphDataById,\n          }).catch(noop)\n        }\n      }\n\n      return feed\n    }\n  })\n\n  ...\n}\n```\n\n[//]: # 'ExampleConditionally2'\n\nThis would load the code and data in parallel:"
+      },
+      {
+        "id": 1342,
+        "file": "guides/prefetching.md",
+        "title": "Prefetching & Router Integration",
+        "headings": ["Using query to prefetch"],
+        "startLine": 31,
+        "endLine": 39,
+        "text": "For prefetching you often want to modify these defaults:\n\n- Out of the box, `query` uses the default `staleTime` configured for the `queryClient` to determine whether existing data in the cache is fresh or needs to be fetched again\n- You can also pass a specific `staleTime` like this: `query({ queryKey: ['todos'], queryFn: fn, staleTime: 5000 })`\n  - This `staleTime` is only used for that query fetch, you still need to set it for any `useQuery` call as well\n  - If you want to always return data if it's available in the cache regardless of the default `staleTime`, you can pass `\"static\"` in for `staleTime`.\n  - Tip: If you are prefetching on the server, set a default `staleTime` higher than `0` for that `queryClient` to avoid having to pass in a specific `staleTime` to each prefetch call\n- If no instances of `useQuery` appear for a prefetched query, it will be deleted and garbage collected after the time specified in `gcTime`\n- If your prefetch is for non-critical data, you can discard the promise with `void` and use `.catch(noop)` to swallow errors. The query will usually try to fetch again in a `useQuery`, which is a nice graceful fallback."
+      }
+    ],
+    "answer": "Start the fetch from an event handler such as `onMouseEnter` (and `onFocus`, for keyboard users) with `queryClient.query` [1]:\n\n```tsx\nconst prefetch = () => {\n  void queryClient\n    .query({ queryKey: ['details'], queryFn: getDetailsData, staleTime: 60000 })\n    .catch(noop)\n}\n\n<button onMouseEnter={prefetch} onFocus={prefetch}>Show Details</button>\n```\n\nSet a `staleTime`: the prefetch only fires when the cached data is older than it [1]. Discarding the promise with `void` and `.catch(noop)` is fine for non-critical data, because `useQuery` will try again when the component renders [6]."
+  },
+  {
+    "question": "Does invalidateQueries with the key todos also invalidate todos with an id?",
+    "passages": [
+      {
+        "id": 1384,
+        "file": "guides/query-invalidation.md",
+        "title": "Query Invalidation",
+        "headings": [],
+        "startLine": 6,
+        "endLine": 24,
+        "text": "Waiting for queries to become stale before they are fetched again doesn't always work, especially when you know for a fact that a query's data is out of date because of something the user has done. For that purpose, the `QueryClient` has an `invalidateQueries` method that lets you intelligently mark queries as stale and potentially refetch them too!\n\n[//]: # 'Example'\n\n```tsx\n// Invalidate every query in the cache\nqueryClient.invalidateQueries()\n// Invalidate every query with a key that starts with `todos`\nqueryClient.invalidateQueries({ queryKey: ['todos'] })\n```\n\n[//]: # 'Example'\n\n> Note: Where other libraries that use normalized caches would attempt to update local queries with the new data either imperatively or via schema inference, TanStack Query gives you the tools to avoid the manual labor that comes with maintaining normalized caches and instead prescribes **targeted invalidation, background-refetching and ultimately atomic updates**.\n\nWhen a query is invalidated with `invalidateQueries`, two things happen:\n\n- It is marked as stale. This stale state overrides any `staleTime` configurations being used in `useQuery` or related hooks\n- If the query is currently being rendered via `useQuery` or related hooks, it will also be refetched in the background"
+      },
+      {
+        "id": 1151,
+        "file": "guides/invalidations-from-mutations.md",
+        "title": "Invalidations from Mutations",
+        "headings": [],
+        "startLine": 6,
+        "endLine": 20,
+        "text": "Invalidating queries is only half the battle. Knowing **when** to invalidate them is the other half. Usually when a mutation in your app succeeds, it's VERY likely that there are related queries in your application that need to be invalidated and possibly refetched to account for the new changes from your mutation.\n\nFor example, assume we have a mutation to post a new todo:\n\n[//]: # 'Example'\n\n```tsx\nconst mutation = useMutation({ mutationFn: postTodo })\n```\n\n[//]: # 'Example'\n\nWhen a successful `postTodo` mutation happens, we likely want all `todos` queries to get invalidated and possibly refetched to show the new todo item. To do this, you can use `useMutation`'s `onSuccess` options and the `client`'s `invalidateQueries` function:\n\n[//]: # 'Example2'"
+      },
+      {
+        "id": 1152,
+        "file": "guides/invalidations-from-mutations.md",
+        "title": "Invalidations from Mutations",
+        "headings": [],
+        "startLine": 20,
+        "endLine": 51,
+        "text": "[//]: # 'Example2'\n\n```tsx\nimport { useMutation, useQueryClient } from '@tanstack/react-query'\n\nconst queryClient = useQueryClient()\n\n// When this mutation succeeds, invalidate any queries with the `todos` or `reminders` query key\nconst mutation = useMutation({\n  mutationFn: addTodo,\n  onSuccess: async () => {\n    // If you're invalidating a single query\n    await queryClient.invalidateQueries({ queryKey: ['todos'] })\n\n    // If you're invalidating multiple queries\n    await Promise.all([\n      queryClient.invalidateQueries({ queryKey: ['todos'] }),\n      queryClient.invalidateQueries({ queryKey: ['reminders'] }),\n    ])\n  },\n})\n```\n\n[//]: # 'Example2'\n\nReturning a Promise on `onSuccess` makes sure the data is updated before the mutation is entirely complete (i.e., isPending is true until onSuccess is fulfilled)\n\n[//]: # 'Example2'\n\nYou can wire up your invalidations to happen using any of the callbacks available in the [`useMutation` hook](./mutations.md)\n\n[//]: # 'Materials'"
+      },
+      {
+        "id": 1315,
+        "file": "guides/optimistic-updates.md",
+        "title": "Optimistic Updates",
+        "headings": ["Via the cache", "Updating a list of todos when adding a new todo"],
+        "startLine": 92,
+        "endLine": 127,
+        "text": "### Updating a list of todos when adding a new todo\n\n[//]: # 'Example'\n\n```tsx\nconst queryClient = useQueryClient()\n\nuseMutation({\n  mutationFn: updateTodo,\n  // When mutate is called:\n  onMutate: async (newTodo, context) => {\n    // Cancel any outgoing refetches\n    // (so they don't overwrite our optimistic update)\n    await context.client.cancelQueries({ queryKey: ['todos'] })\n\n    // Snapshot the previous value\n    const previousTodos = context.client.getQueryData(['todos'])\n\n    // Optimistically update to the new value\n    context.client.setQueryData(['todos'], (old) => [...old, newTodo])\n\n    // Return a result with the snapshotted value\n    return { previousTodos }\n  },\n  // If the mutation fails,\n  // use the result returned from onMutate to roll back\n  onError: (err, newTodo, onMutateResult, context) => {\n    context.client.setQueryData(['todos'], onMutateResult.previousTodos)\n  },\n  // Always refetch after error or success:\n  onSettled: (data, error, variables, onMutateResult, context) =>\n    context.client.invalidateQueries({ queryKey: ['todos'] }),\n})\n```\n\n[//]: # 'Example'"
+      },
+      {
+        "id": 1385,
+        "file": "guides/query-invalidation.md",
+        "title": "Query Invalidation",
+        "headings": ["Query Matching with invalidateQueries"],
+        "startLine": 26,
+        "endLine": 57,
+        "text": "## Query Matching with `invalidateQueries`\n\nWhen using APIs like `invalidateQueries` and `removeQueries` (and others that support partial query matching), you can match multiple queries by their prefix, or get really specific and match an exact query. For information on the types of filters you can use, please see [Query Filters](./filters.md#query-filters).\n\nIn this example, we can use the `todos` prefix to invalidate any queries that start with `todos` in their query key:\n\n[//]: # 'Example2'\n\n```tsx\nimport { useQuery, useQueryClient } from '@tanstack/react-query'\n\n// Get QueryClient from the context\nconst queryClient = useQueryClient()\n\nqueryClient.invalidateQueries({ queryKey: ['todos'] })\n\n// Both queries below will be invalidated\nconst todoListQuery = useQuery({\n  queryKey: ['todos'],\n  queryFn: fetchTodoList,\n})\nconst todoListQuery = useQuery({\n  queryKey: ['todos', { page: 1 }],\n  queryFn: fetchTodoList,\n})\n```\n\n[//]: # 'Example2'\n\nYou can even invalidate queries with specific variables by passing a more specific query key to the `invalidateQueries` method:\n\n[//]: # 'Example3'"
+      },
+      {
+        "id": 1386,
+        "file": "guides/query-invalidation.md",
+        "title": "Query Invalidation",
+        "headings": ["Query Matching with invalidateQueries"],
+        "startLine": 57,
+        "endLine": 102,
+        "text": "[//]: # 'Example3'\n\n```tsx\nqueryClient.invalidateQueries({\n  queryKey: ['todos', { type: 'done' }],\n})\n\n// The query below will be invalidated\nconst todoListQuery = useQuery({\n  queryKey: ['todos', { type: 'done' }],\n  queryFn: fetchTodoList,\n})\n\n// However, the following query below will NOT be invalidated\nconst todoListQuery = useQuery({\n  queryKey: ['todos'],\n  queryFn: fetchTodoList,\n})\n```\n\n[//]: # 'Example3'\n\nThe `invalidateQueries` API is very flexible, so even if you want to **only** invalidate `todos` queries that don't have any more variables or subkeys, you can pass an `exact: true` option to the `invalidateQueries` method:\n\n[//]: # 'Example4'\n\n```tsx\nqueryClient.invalidateQueries({\n  queryKey: ['todos'],\n  exact: true,\n})\n\n// The query below will be invalidated\nconst todoListQuery = useQuery({\n  queryKey: ['todos'],\n  queryFn: fetchTodoList,\n})\n\n// However, the following query below will NOT be invalidated\nconst todoListQuery = useQuery({\n  queryKey: ['todos', { type: 'done' }],\n  queryFn: fetchTodoList,\n})\n```\n\n[//]: # 'Example4'"
+      }
+    ],
+    "answer": "Yes. `invalidateQueries` matches by prefix, so `queryClient.invalidateQueries({ queryKey: ['todos'] })` invalidates every query whose key starts with `todos`, including keys with variables such as `['todos', { page: 1 }]` [1, 5].\n\nIf you only want the query whose key is exactly `['todos']`, pass `exact: true` [6]. You can also go the other way and target one variant by passing the more specific key [5, 6]."
+  },
+  {
+    "question": "How do I change the delay between retries?",
+    "passages": [
+      {
+        "id": 1125,
+        "file": "guides/important-defaults.md",
+        "title": "Important Defaults",
+        "headings": [],
+        "startLine": 24,
+        "endLine": 37,
+        "text": "> Setting `staleTime` is the recommended way to avoid excessive refetches, but you can also customize the points in time for refetches by setting options like `refetchOnMount`, `refetchOnWindowFocus` and `refetchOnReconnect`.\n\n- Queries can optionally be configured with a `refetchInterval` to trigger refetches periodically, which is independent of the `staleTime` setting. See [Polling](./polling.md) for details.\n\n- Query results that have no more active instances of `useQuery`, `useInfiniteQuery` or query observers are labeled as \"inactive\" and remain in the cache in case they are used again at a later time.\n- By default, \"inactive\" queries are garbage collected after **5 minutes**.\n\n  > To change this, you can alter the default `gcTime` for queries to something other than `1000 * 60 * 5` milliseconds.\n\n- Queries that fail are **silently retried 3 times, with exponential backoff delay** before capturing and displaying an error to the UI.\n\n  > To change this, you can alter the default `retry` and `retryDelay` options for queries to something other than `3` and the default exponential backoff function.\n\n[//]: # 'StructuralSharing'"
+      },
+      {
+        "id": 1397,
+        "file": "guides/query-retries.md",
+        "title": "Query Retries",
+        "headings": ["Retry Delay"],
+        "startLine": 37,
+        "endLine": 80,
+        "text": "## Retry Delay\n\nBy default, retries in TanStack Query do not happen immediately after a request fails. As is standard, a back-off delay is gradually applied to each retry attempt.\n\nThe default `retryDelay` is set to double (starting at `1000`ms) with each attempt, but not exceed 30 seconds:\n\n[//]: # 'Example2'\n\n```tsx\n// Configure for all queries\nimport {\n  QueryCache,\n  QueryClient,\n  QueryClientProvider,\n} from '@tanstack/react-query'\n\nconst queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),\n    },\n  },\n})\n\nfunction App() {\n  return <QueryClientProvider client={queryClient}>...</QueryClientProvider>\n}\n```\n\n[//]: # 'Example2'\n\nThough it is not recommended, you can obviously override the `retryDelay` function/integer in both the Provider and individual query options. If set to an integer instead of a function the delay will always be the same amount of time:\n\n[//]: # 'Example3'\n\n```tsx\nconst result = useQuery({\n  queryKey: ['todos'],\n  queryFn: fetchTodoList,\n  retryDelay: 1000, // Will always wait 1000ms to retry, regardless of how many retries\n})\n```\n\n[//]: # 'Example3'"
+      },
+      {
+        "id": 1277,
+        "file": "guides/migrating-to-v5.md",
+        "title": "Migrating to TanStack Query v5",
+        "headings": ["Breaking Changes", "Query defaults changes"],
+        "startLine": 446,
+        "endLine": 473,
+        "text": "### Query defaults changes\n\n`queryClient.getQueryDefaults` will now merge together all matching registrations instead of returning only the first matching registration.\n\nAs a result, calls to `queryClient.setQueryDefaults` should now be ordered with _increasing_ specificity.\nThat is, registrations should be made from the **most generic key** to the **least generic one**.\n\nFor example:\n\n```ts\n+ queryClient.setQueryDefaults(['todo'], {   // [!code ++]\n+   retry: false,  // [!code ++]\n+   staleTime: 60_000,  // [!code ++]\n+ })  // [!code ++]\nqueryClient.setQueryDefaults(['todo', 'detail'], {\n+   retry: true,  // [!code --]\n  retryDelay: 1_000,\n  staleTime: 10_000,\n})\n- queryClient.setQueryDefaults(['todo'], { // [!code --]\n-   retry: false, // [!code --]\n-   staleTime: 60_000, // [!code --]\n- }) // [!code --]\n```\n\nNote that in this specific example, `retry: true` was added to the `['todo', 'detail']` registration to counteract it now inheriting `retry: false` from the more general registration. The specific changes needed to maintain exact behavior will vary depending on your defaults.\n\n[//]: # 'FrameworkSpecificBreakingChanges'"
+      },
+      {
+        "id": 1395,
+        "file": "guides/query-retries.md",
+        "title": "Query Retries",
+        "headings": [],
+        "startLine": 6,
+        "endLine": 33,
+        "text": "When a `useQuery` query fails (the query function throws an error), TanStack Query will automatically retry the query if that query's request has not reached the max number of consecutive retries (defaults to `3`) or a function is provided to determine if a retry is allowed.\n\nYou can configure retries both on a global level and an individual query level.\n\n- Setting `retry = false` will disable retries.\n- Setting `retry = 6` will retry failing requests 6 times before showing the final error thrown by the function.\n- Setting `retry = true` will infinitely retry failing requests.\n- Setting `retry = (failureCount, error) => ...` allows for custom logic based on why the request failed. Note that `failureCount` starts at `0` for the first retry attempt.\n\n[//]: # 'Info'\n\n> On the server, retries default to `0` to make server rendering as fast as possible.\n\n[//]: # 'Info'\n[//]: # 'Example'\n\n```tsx\nimport { useQuery } from '@tanstack/react-query'\n\n// Make a specific query retry a certain number of times\nconst result = useQuery({\n  queryKey: ['todos', 1],\n  queryFn: fetchTodoListPage,\n  retry: 10, // Will retry failed requests 10 times before displaying an error\n})\n```\n\n[//]: # 'Example'"
+      },
+      {
+        "id": 1396,
+        "file": "guides/query-retries.md",
+        "title": "Query Retries",
+        "headings": [],
+        "startLine": 33,
+        "endLine": 35,
+        "text": "[//]: # 'Example'\n\n> Info: Contents of the `error` property will be part of `failureReason` response property of `useQuery` until the last retry attempt. So in above example any error contents will be part of `failureReason` property for first 9 retry attempts (Overall 10 attempts) and finally they will be part of `error` after last attempt if error persists after all retry attempts."
+      },
+      {
+        "id": 1296,
+        "file": "guides/mutations.md",
+        "title": "Mutations",
+        "headings": ["Retry"],
+        "startLine": 268,
+        "endLine": 283,
+        "text": "## Retry\n\nBy default, TanStack Query will not retry a mutation on error, but it is possible with the `retry` option:\n\n[//]: # 'Example9'\n\n```tsx\nconst mutation = useMutation({\n  mutationFn: addTodo,\n  retry: 3,\n})\n```\n\n[//]: # 'Example9'\n\nIf mutations fail because the device is offline, they will be retried in the same order when the device reconnects."
+      }
+    ],
+    "answer": "Set `retryDelay`. By default the delay doubles with each attempt, starting at 1000 ms and capped at 30 seconds, and you can configure it for all queries on the `QueryClient` [2]:\n\n```tsx\nconst queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),\n    },\n  },\n})\n```\n\nIt can also be set on an individual query, as a function or as a fixed number of milliseconds [2]. How many times to retry is a separate option, `retry`, which defaults to 3 [4]."
+  },
+  {
+    "question": "Where did the onSuccess callback on useQuery go in v5?",
+    "passages": [
+      {
+        "id": 1247,
+        "file": "guides/migrating-to-v5.md",
+        "title": "Migrating to TanStack Query v5",
+        "headings": [
+          "Breaking Changes",
+          "Callbacks on useQuery (and QueryObserver) have been removed"
+        ],
+        "startLine": 141,
+        "endLine": 143,
+        "text": "### Callbacks on useQuery (and QueryObserver) have been removed\n\n`onSuccess`, `onError` and `onSettled` have been removed from Queries. They haven't been touched for Mutations. Please see [this RFC](https://github.com/TanStack/query/discussions/5279) for motivations behind this change and what to do instead."
+      },
+      {
+        "id": 1214,
+        "file": "guides/migrating-to-react-query-4.md",
+        "title": "Migrating to React Query 4",
+        "headings": ["Breaking Changes", "onSuccess is no longer called from setQueryData"],
+        "startLine": 268,
+        "endLine": 279,
+        "text": "### `onSuccess` is no longer called from `setQueryData`\n\nThis was confusing to many and also created infinite loops if `setQueryData` was called from within `onSuccess`. It was also a frequent source of error when combined with `staleTime`, because if data was read from the cache only, `onSuccess` was _not_ called.\n\nSimilar to `onError` and `onSettled`, the `onSuccess` callback is now tied to a request being made. No request -> no callback.\n\nIf you want to listen to changes of the `data` field, you can best do this with a `useEffect`, where `data` is part of the dependency Array. Since React Query ensures stable data through structural sharing, the effect will not execute with every background refetch, but only if something within data has changed:\n\n```\nconst { data } = useQuery({ queryKey, queryFn })\nReact.useEffect(() => mySideEffectHere(data), [data])\n```"
+      },
+      {
+        "id": 1530,
+        "file": "plugins/persistQueryClient.md",
+        "title": "persistQueryClient",
+        "headings": ["Usage with React", "PersistQueryClientProvider", "Props"],
+        "startLine": 211,
+        "endLine": 225,
+        "text": "#### Props\n\n`PersistQueryClientProvider` takes the same props as [QueryClientProvider](../reference/functions/QueryClientProvider.md), and additionally:\n\n- `persistOptions: PersistQueryClientOptions`\n  - all [options](#options) you can pass to [persistQueryClient](#persistqueryclient) minus the QueryClient itself\n- `onSuccess?: () => Promise<unknown> | unknown`\n  - optional\n  - will be called when the initial restore is finished\n  - can be used to [resumePausedMutations](../reference/classes/QueryClient.md#resumepausedmutations)\n  - if a Promise is returned, it will be awaited; restoring is seen as ongoing until then\n- `onError?: () => Promise<unknown> | unknown`\n  - optional\n  - will be called when an error is thrown during restoration\n  - if a Promise is returned, it will be awaited"
+      },
+      {
+        "id": 1853,
+        "file": "reference/functions/useQuery.md",
+        "title": "useQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 337,
+        "endLine": 370,
+        "text": "  const queryClient = useQueryClient()\n\n  const { data, isError, error } = useQuery({\n    queryKey: ['post', postId],\n    queryFn: () => fetchPost(postId),\n    initialData: () =>\n      queryClient\n        .getQueryData<Array<Post>>(['posts'])\n        ?.find((post) => post.id === postId),\n    initialDataUpdatedAt: () =>\n      queryClient.getQueryState(['posts'])?.dataUpdatedAt,\n  })\n\n  if (isError) return <span>Error: {error.message}</span>\n\n  return <h1>{data?.title}</h1>\n}\n```\n\nPaginated data, keeping the previous page's data visible while the next page loads:\n```tsx\nimport { keepPreviousData, useQuery } from '@tanstack/react-query'\nimport { useState } from 'react'\n\nfunction Posts() {\n  const [page, setPage] = useState(0)\n\n  const { data, isPlaceholderData, isError, error } = useQuery({\n    queryKey: ['posts', page],\n    queryFn: () => fetchPosts(page),\n    placeholderData: keepPreviousData,\n  })\n\n  if (isError) return <span>Error: {error.message}</span>"
+      },
+      {
+        "id": 1248,
+        "file": "guides/migrating-to-v5.md",
+        "title": "Migrating to TanStack Query v5",
+        "headings": [
+          "Breaking Changes",
+          "The refetchInterval callback function only gets query passed"
+        ],
+        "startLine": 145,
+        "endLine": 154,
+        "text": "### The `refetchInterval` callback function only gets `query` passed\n\nThis streamlines how callbacks are invoked (the `refetchOnWindowFocus`, `refetchOnMount` and `refetchOnReconnect` callbacks all only get the query passed as well), and it fixes some typing issues when callbacks get data transformed by `select`.\n\n```tsx\n- refetchInterval: number | false | ((data: TData | undefined, query: Query) => number | false | undefined) // [!code --]\n+ refetchInterval: number | false | ((query: Query) => number | false | undefined) // [!code ++]\n```\n\nYou can still access data with `query.state.data`, however, it will not be data that has been transformed by `select`. If you need to access the transformed data, you can call the transformation again on `query.state.data`."
+      },
+      {
+        "id": 1850,
+        "file": "reference/functions/useQuery.md",
+        "title": "useQuery",
+        "headings": ["Call Signature", "Examples"],
+        "startLine": 243,
+        "endLine": 287,
+        "text": "### Examples\n\n```tsx\nimport { useQuery } from '@tanstack/react-query'\n\nfunction Posts() {\n  const { status, data, error, isFetching } = useQuery({\n    queryKey: ['posts'],\n    queryFn: fetchPosts,\n  })\n\n  if (status === 'pending') return 'Loading...'\n  if (status === 'error') return <span>Error: {error.message}</span>\n\n  return (\n    <div>\n      <ul>\n        {data.map((post) => (\n          <li key={post.id}>{post.title}</li>\n        ))}\n      </ul>\n      <div>{isFetching ? 'Background Updating...' : ' '}</div>\n    </div>\n  )\n}\n```\n\n`select` derives whatever `data` a component needs from the cached value, without changing what's\nactually stored in the cache — the cache still holds the full `Post[]`, but `data` here is a `number`:\n```tsx\nimport { useQuery } from '@tanstack/react-query'\n\nfunction PostCount() {\n  const { data, isPending, isError, error } = useQuery({\n    queryKey: ['posts'],\n    queryFn: fetchPosts,\n    select: (posts) => posts.length,\n  })\n\n  if (isPending) return 'Loading...'\n  if (isError) return <span>Error: {error.message}</span>\n\n  return <span>{data} posts</span>\n}\n```"
+      }
+    ],
+    "answer": "It was removed. In v5, `onSuccess`, `onError` and `onSettled` no longer exist on queries; they are unchanged on mutations [1].\n\nIf what you need is to react when the data changes, the docs suggest a `useEffect` with `data` in its dependency array. Structural sharing keeps `data` stable, so the effect only runs when something in the data actually changed [2]:\n\n```tsx\nconst { data } = useQuery({ queryKey, queryFn })\nReact.useEffect(() => mySideEffectHere(data), [data])\n```"
+  },
+  {
+    "question": "How do I configure SWR's dedupingInterval?",
+    "passages": [
+      {
+        "id": 1051,
+        "file": "comparison.md",
+        "title": "Comparison | React Query vs SWR vs Apollo vs RTK Query vs React Router",
+        "headings": ["Notes"],
+        "startLine": 70,
+        "endLine": 72,
+        "text": "> **<sup>3</sup> Partial query matching** - Because React Query uses deterministic query key serialization, this allows you to manipulate variable groups of queries without having to know each individual query-key that you want to match, eg. you can refetch every query that starts with `todos` in its key, regardless of variables, or you can target specific queries with (or without) variables or nested properties, and even use a filter function to only match queries that pass your specific conditions.\n\n> **<sup>4</sup> Pre-usage Query Configuration** - This is simply a fancy name for being able to configure how queries and mutations will behave before they are used. For instance, a query can be fully configured with defaults beforehand and when the time comes to use it, only `useQuery({ queryKey })` is necessary, instead of being required to pass the fetcher and/or options with every usage. SWR does have a partial form of this feature by allowing you to pre-configure a default fetcher, but only as a global fetcher, not on a per-query basis and definitely not for mutations."
+      },
+      {
+        "id": 1338,
+        "file": "guides/polling.md",
+        "title": "Polling",
+        "headings": ["Note on deduplication"],
+        "startLine": 99,
+        "endLine": 103,
+        "text": "## Note on deduplication\n\nEach `QueryObserver` (each component using `useQuery` with `refetchInterval`) runs its own timer. Two components subscribed to the same key with `refetchInterval: 5000` each fire their timer every 5 seconds. What gets deduplicated is concurrent in-flight fetches: if two timers fire at the same time, only one network request goes out. The timers are observer-level; the deduplication is query-level.\n\n[//]: # 'ReactNative'"
+      },
+      {
+        "id": 1052,
+        "file": "comparison.md",
+        "title": "Comparison | React Query vs SWR vs Apollo vs RTK Query vs React Router",
+        "headings": ["Notes"],
+        "startLine": 72,
+        "endLine": 76,
+        "text": "> **<sup>4</sup> Pre-usage Query Configuration** - This is simply a fancy name for being able to configure how queries and mutations will behave before they are used. For instance, a query can be fully configured with defaults beforehand and when the time comes to use it, only `useQuery({ queryKey })` is necessary, instead of being required to pass the fetcher and/or options with every usage. SWR does have a partial form of this feature by allowing you to pre-configure a default fetcher, but only as a global fetcher, not on a per-query basis and definitely not for mutations.\n\n> **<sup>5</sup> Automatic Refetch after Mutation** - For truly automatic refetching to happen after a mutation occurs, a schema is necessary (like the one graphQL provides) along with heuristics that help the library know how to identify individual entities and entities types in that schema.\n\n> **<sup>6</sup> Normalized Caching** - React Query, SWR and RTK-Query do not currently support automatic-normalized caching which describes storing entities in a flat architecture to avoid some high-level data duplication."
+      },
+      {
+        "id": 1046,
+        "file": "comparison.md",
+        "title": "Comparison | React Query vs SWR vs Apollo vs RTK Query vs React Router",
+        "headings": [],
+        "startLine": 54,
+        "endLine": 58,
+        "text": "| Pre-usage Query/Mutation Configuration<sup>4</sup> | ✅                                       | 🛑                                       | ✅                                         | ✅                                   | ✅                                                                        |\n| Window Focus Refetching                            | ✅                                       | ✅                                       | 🛑                                         | ✅                                   | 🛑                                                                        |\n| Network Status Refetching                          | ✅                                       | ✅                                       | ✅                                         | ✅                                   | 🛑                                                                        |\n| General Cache Dehydration/Rehydration              | ✅                                       | 🛑                                       | ✅                                         | ✅                                   | ✅                                                                        |\n| Offline Caching                                    | ✅                                       | 🛑                                       | ✅                                         | 🔶                                   | 🛑                                                                        |"
+      },
+      {
+        "id": 1037,
+        "file": "comparison.md",
+        "title": "Comparison | React Query vs SWR vs Apollo vs RTK Query vs React Router",
+        "headings": [],
+        "startLine": 27,
+        "endLine": 31,
+        "text": "| Bundle Size                                        | [![][bp-react-query]][bpl-react-query]   | [![][bp-swr]][bpl-swr]                   | [![][bp-apollo]][bpl-apollo]               | [![][bp-rtk-query]][bpl-rtk-query]   | [![][bp-react-router]][bpl-react-router] + [![][bp-history]][bpl-history] |\n| API Definition Location                            | Component, External Config               | Component                                | GraphQL Schema                             | External Config                      | Route Tree Configuration                                                  |\n| Queries                                            | ✅                                       | ✅                                       | ✅                                         | ✅                                   | ✅                                                                        |\n| Cache Persistence                                  | ✅                                       | ✅                                       | ✅                                         | ✅                                   | 🛑 Active Routes Only <sup>8</sup>                                        |\n| Devtools                                           | ✅                                       | ✅                                       | ✅                                         | ✅                                   | 🛑                                                                        |"
+      },
+      {
+        "id": 1036,
+        "file": "comparison.md",
+        "title": "Comparison | React Query vs SWR vs Apollo vs RTK Query vs React Router",
+        "headings": [],
+        "startLine": 25,
+        "endLine": 28,
+        "text": "| Data Change Detection                              | Deep Comparison + Structural Sharing     | Deep Compare (via `stable-hash`)         | Deep Compare (Unstable Serialization)      | Key Referential Equality (===)       | Loader Run                                                                |\n| Data Memoization                                   | Full Structural Sharing                  | Identity (===)                           | Normalized Identity                        | Identity (===)                       | Identity (===)                                                            |\n| Bundle Size                                        | [![][bp-react-query]][bpl-react-query]   | [![][bp-swr]][bpl-swr]                   | [![][bp-apollo]][bpl-apollo]               | [![][bp-rtk-query]][bpl-rtk-query]   | [![][bp-react-router]][bpl-react-router] + [![][bp-history]][bpl-history] |\n| API Definition Location                            | Component, External Config               | Component                                | GraphQL Schema                             | External Config                      | Route Tree Configuration                                                  |"
+      }
+    ],
+    "answer": "I couldn't find that in the TanStack Query docs."
+  }
+]

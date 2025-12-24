@@ -1,0 +1,96 @@
+# Hand-written answers for the no-key demo. Each one cites, by number, the
+# passages that `npm run fixtures` retrieves for its question (hybrid +
+# rerank, top 6); run `npm run fixtures -- --print` to see them. The
+# recorder refuses an answer that cites a passage that is not there.
+
+- question: How do I cancel a query manually?
+  answer: |
+    Call `queryClient.cancelQueries` with the query's key, for example from a Cancel button. It cancels the query and reverts it to the state it had before the fetch started [1]:
+
+    ```tsx
+    const queryClient = useQueryClient()
+
+    <button onClick={() => queryClient.cancelQueries({ queryKey: ['todos'] })}>
+      Cancel
+    </button>
+    ```
+
+    For the request itself to stop, your query function has to use the `signal` it receives, for instance by passing it to `fetch` [1]. Every query function gets an `AbortSignal` that is aborted when the query is cancelled [2], and clients like axios accept it the same way [3].
+
+    `cancelQueries` also takes options: `silent: true` keeps the `CancelledError` from reaching observers, and `revert` (on by default) restores the previous data and status [5].
+
+- question: How do I keep showing the previous page while the next page loads?
+  answer: |
+    Pass `placeholderData: keepPreviousData` to `useQuery`. While the query for the new page is fetching, the data from the last page stays on screen instead of falling back to a loading state [1, 2]:
+
+    ```tsx
+    const { data, isPlaceholderData } = useQuery({
+      queryKey: ['projects', page],
+      queryFn: () => fetchProjects(page),
+      placeholderData: keepPreviousData,
+    })
+    ```
+
+    `isPlaceholderData` tells you that what you are showing is the previous page, which is useful for disabling the Next button until the real page arrives [2].
+
+- question: What is skipToken and when should I use it instead of enabled false?
+  answer: |
+    `skipToken` is a type-safe way to disable a query: pass it as the `queryFn` while a condition is not met, and the query does not run [2]. Because the real query function is only used when its inputs exist, you don't need a non-null assertion like `fetchPost(postId!)` [3]:
+
+    ```tsx
+    queryFn: filter ? () => fetchTodos(filter) : skipToken
+    ```
+
+    Apart from one limitation, it behaves the same as `enabled: false` [2]. That limitation is the reason to choose one over the other: `refetch()` does not work with `skipToken` and throws a `Missing queryFn` error, so if you need to trigger the query manually, use `enabled: false` instead [1, 2].
+
+- question: How do I prefetch data when the user hovers over a link?
+  answer: |
+    Start the fetch from an event handler such as `onMouseEnter` (and `onFocus`, for keyboard users) with `queryClient.query` [1]:
+
+    ```tsx
+    const prefetch = () => {
+      void queryClient
+        .query({ queryKey: ['details'], queryFn: getDetailsData, staleTime: 60000 })
+        .catch(noop)
+    }
+
+    <button onMouseEnter={prefetch} onFocus={prefetch}>Show Details</button>
+    ```
+
+    Set a `staleTime`: the prefetch only fires when the cached data is older than it [1]. Discarding the promise with `void` and `.catch(noop)` is fine for non-critical data, because `useQuery` will try again when the component renders [6].
+
+- question: Does invalidateQueries with the key todos also invalidate todos with an id?
+  answer: |
+    Yes. `invalidateQueries` matches by prefix, so `queryClient.invalidateQueries({ queryKey: ['todos'] })` invalidates every query whose key starts with `todos`, including keys with variables such as `['todos', { page: 1 }]` [1, 5].
+
+    If you only want the query whose key is exactly `['todos']`, pass `exact: true` [6]. You can also go the other way and target one variant by passing the more specific key [5, 6].
+
+- question: How do I change the delay between retries?
+  answer: |
+    Set `retryDelay`. By default the delay doubles with each attempt, starting at 1000 ms and capped at 30 seconds, and you can configure it for all queries on the `QueryClient` [2]:
+
+    ```tsx
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+        },
+      },
+    })
+    ```
+
+    It can also be set on an individual query, as a function or as a fixed number of milliseconds [2]. How many times to retry is a separate option, `retry`, which defaults to 3 [4].
+
+- question: Where did the onSuccess callback on useQuery go in v5?
+  answer: |
+    It was removed. In v5, `onSuccess`, `onError` and `onSettled` no longer exist on queries; they are unchanged on mutations [1].
+
+    If what you need is to react when the data changes, the docs suggest a `useEffect` with `data` in its dependency array. Structural sharing keeps `data` stable, so the effect only runs when something in the data actually changed [2]:
+
+    ```tsx
+    const { data } = useQuery({ queryKey, queryFn })
+    React.useEffect(() => mySideEffectHere(data), [data])
+    ```
+
+- question: How do I configure SWR's dedupingInterval?
+  answer: I couldn't find that in the TanStack Query docs.

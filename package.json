@@ -14,7 +14,8 @@
     "db:migrate": "tsx --conditions=react-server scripts/migrate.ts",
     "ingest": "tsx --conditions=react-server scripts/ingest.ts",
     "eval:retrieval": "tsx --conditions=react-server scripts/eval-retrieval.ts",
-    "eval:answers": "tsx --conditions=react-server scripts/eval-answers.ts"
+    "eval:answers": "tsx --conditions=react-server scripts/eval-answers.ts",
+    "fixtures": "tsx --conditions=react-server scripts/record-fixtures.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

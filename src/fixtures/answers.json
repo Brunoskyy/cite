@@ -21,15 +21,6 @@
         "text": "TanStack Query provides each query function with an [`AbortSignal` instance](https://developer.mozilla.org/docs/Web/API/AbortSignal). When a query becomes out-of-date or inactive, this `signal` will become aborted. This means that all queries are cancellable, and you can respond to the cancellation inside your query function if desired. The best part about this is that it allows you to continue to use normal async/await syntax while getting all the benefits of automatic cancellation.\n\nThe `AbortController` API is available in [most runtime environments](https://developer.mozilla.org/docs/Web/API/AbortController#browser_compatibility), but if your runtime environment does not support it, you will need to provide a polyfill. There are [several available](https://www.npmjs.com/search?q=abortcontroller%20polyfill)."
       },
       {
-        "id": 1371,
-        "file": "guides/query-cancellation.md",
-        "title": "Query Cancellation",
-        "headings": ["Using axios [v0.22.0+](https://github.com/axios/axios/releases/tag/v0.22.0)"],
-        "startLine": 45,
-        "endLine": 62,
-        "text": "## Using `axios` [v0.22.0+](https://github.com/axios/axios/releases/tag/v0.22.0)\n\n[//]: # 'Example2'\n\n```tsx\nimport axios from 'axios'\n\nconst query = useQuery({\n  queryKey: ['todos'],\n  queryFn: ({ signal }) =>\n    axios.get('/todos', {\n      // Pass the signal to `axios`\n      signal,\n    }),\n})\n```\n\n[//]: # 'Example2'"
-      },
-      {
         "id": 1216,
         "file": "guides/migrating-to-react-query-4.md",
         "title": "Migrating to React Query 4",
@@ -48,6 +39,15 @@
         "text": "## `Cancel Options`\n\nCancel options are used to control the behavior of query cancellation operations.\n\n```tsx\n// Cancel specific queries silently\nawait queryClient.cancelQueries({ queryKey: ['posts'] }, { silent: true })\n```\n\nA cancel options object supports the following properties:\n\n- `silent?: boolean`\n  - When set to `true`, suppresses propagation of `CancelledError` to observers (e.g., `onError` callbacks) and related notifications, and returns the retry promise instead of rejecting.\n  - Defaults to `false`\n- `revert?: boolean`\n  - When set to `true`, restores the query’s state (data and status) from immediately before the in-flight fetch, sets `fetchStatus` back to `idle`, and only throws if there was no prior data.\n  - Defaults to `true`"
       },
       {
+        "id": 1925,
+        "file": "guides/query-cancellation.md",
+        "title": "Query Cancellation",
+        "headings": ["Using axios v0.22.0+"],
+        "startLine": 45,
+        "endLine": 62,
+        "text": "## Using `axios` [v0.22.0+](https://github.com/axios/axios/releases/tag/v0.22.0)\n\n[//]: # 'Example2'\n\n```tsx\nimport axios from 'axios'\n\nconst query = useQuery({\n  queryKey: ['todos'],\n  queryFn: ({ signal }) =>\n    axios.get('/todos', {\n      // Pass the signal to `axios`\n      signal,\n    }),\n})\n```\n\n[//]: # 'Example2'"
+      },
+      {
         "id": 1110,
         "file": "guides/disabling-queries.md",
         "title": "Disabling/Pausing Queries",
@@ -57,7 +57,7 @@
         "text": "If you ever want to disable a query from automatically running, you can use the `enabled = false` option. The enabled option also accepts a callback that returns a boolean.\n\nWhen `enabled` is `false`:\n\n- If the query has cached data, then the query will be initialized in the `status === 'success'` or `isSuccess` state.\n- If the query does not have cached data, then the query will start in the `status === 'pending'` and `fetchStatus === 'idle'` state.\n- The query will not automatically fetch on mount.\n- The query will not automatically refetch in the background.\n- The query will ignore query client `invalidateQueries` and `refetchQueries` calls that would normally result in the query refetching.\n- `refetch` returned from `useQuery` can be used to manually trigger the query to fetch. However, it will not work with `skipToken`.\n\n> TypeScript users may prefer to use [skipToken](#typesafe-disabling-of-queries-using-skiptoken) as an alternative to `enabled = false`.\n\n[//]: # 'Example'"
       }
     ],
-    "answer": "Call `queryClient.cancelQueries` with the query's key, for example from a Cancel button. It cancels the query and reverts it to the state it had before the fetch started [1]:\n\n```tsx\nconst queryClient = useQueryClient()\n\n<button onClick={() => queryClient.cancelQueries({ queryKey: ['todos'] })}>\n  Cancel\n</button>\n```\n\nFor the request itself to stop, your query function has to use the `signal` it receives, for instance by passing it to `fetch` [1]. Every query function gets an `AbortSignal` that is aborted when the query is cancelled [2], and clients like axios accept it the same way [3].\n\n`cancelQueries` also takes options: `silent: true` keeps the `CancelledError` from reaching observers, and `revert` (on by default) restores the previous data and status [5]."
+    "answer": "Call `queryClient.cancelQueries` with the query's key, for example from a Cancel button. It cancels the query and reverts it to the state it had before the fetch started [1]:\n\n```tsx\nconst queryClient = useQueryClient()\n\n<button onClick={() => queryClient.cancelQueries({ queryKey: ['todos'] })}>\n  Cancel\n</button>\n```\n\nFor the request itself to stop, your query function has to use the `signal` it receives, for instance by passing it to `fetch` [1]. Every query function gets an `AbortSignal` that is aborted when the query is cancelled [2], and clients like axios accept it the same way [5].\n\n`cancelQueries` also takes options: `silent: true` keeps the `CancelledError` from reaching observers, and `revert` (on by default) restores the previous data and status [4]."
   },
   {
     "question": "How do I keep showing the previous page while the next page loads?",

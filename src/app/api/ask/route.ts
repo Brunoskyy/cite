@@ -2,7 +2,8 @@ import { z } from 'zod'
 
 import { answer, type StreamEvent } from '@/lib/answer'
 import { createClient } from '@/lib/generate'
-import { Busy, clientKey, RateLimiter, readLimited, Semaphore } from '@/lib/limits'
+import { perClient, retrievalSlots } from '@/lib/guards'
+import { Busy, clientKey, readLimited } from '@/lib/limits'
 import { retrieve } from '@/lib/retrieve'
 import { RETRIEVAL_MODES } from '@/lib/types'
 
@@ -17,10 +18,6 @@ const Body = z.object({
     .max(400, 'Keep the question under 400 characters.'),
   mode: z.enum(RETRIEVAL_MODES).default('rerank'),
 })
-
-const perClient = new RateLimiter(20, 60_000)
-// Embedding and reranking are CPU work on this machine: two at a time, a few waiting.
-const retrievalSlots = new Semaphore(2, 8)
 
 export async function POST(request: Request): Promise<Response> {
   const wait = perClient.take(clientKey(request.headers))

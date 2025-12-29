@@ -1,26 +1,217 @@
 @import 'tailwindcss';
 
+/*
+  Cite reads like a reference desk: cool paper, near-black ink, one ink-blue
+  accent for citations, and a highlighter yellow for the lines a citation
+  points at. Light tokens on :root; dark ones written twice so an explicit
+  choice on <html data-theme> wins over the system both ways.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --bg: #f6f6f3;
+  --surface: #fcfcfa;
+  --surface-2: #f0f0ec;
+  --ink: #16171b;
+  --muted: #5a5c64;
+  --faint: #8a8c93;
+  --line: #e0dfd9;
+  --accent: #2647b8;
+  --accent-soft: #e4e9fb;
+  --accent-ink: #ffffff;
+  --mark: #fff1b0;
+  --mark-edge: #e6c64a;
+  --danger: #b42318;
+  --ok: #157a3c;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --rank-1: #1c5cab;
+  --rank-2: #2a78d6;
+  --rank-3: #5598e7;
+  --rank-4: #6da7ec;
+  --rank-5: #86b6ef;
+  --rank-text-1: #ffffff;
+  --rank-text-2: #ffffff;
+  --rank-text-3: #16171b;
+  --rank-text-4: #16171b;
+  --rank-text-5: #16171b;
+  --miss: #ecebe6;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme='light']) {
+    --bg: #121316;
+    --surface: #1b1c20;
+    --surface-2: #23242a;
+    --ink: #ecedf0;
+    --muted: #a3a5ad;
+    --faint: #7b7d86;
+    --line: #2d2f36;
+    --accent: #8ea8ff;
+    --accent-soft: #232c4d;
+    --accent-ink: #0f1117;
+    --mark: #4a3f12;
+    --mark-edge: #8c7420;
+    --danger: #ff7b6e;
+    --ok: #5fd08a;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --rank-1: #9ec5f4;
+    --rank-2: #6da7ec;
+    --rank-3: #3987e5;
+    --rank-4: #256abf;
+    --rank-5: #184f95;
+    --rank-text-1: #0f1117;
+    --rank-text-2: #0f1117;
+    --rank-text-3: #0f1117;
+    --rank-text-4: #ecedf0;
+    --rank-text-5: #ecedf0;
+    --miss: #2a2b31;
+    color-scheme: dark;
   }
 }
 
+:root[data-theme='dark'] {
+  --bg: #121316;
+  --surface: #1b1c20;
+  --surface-2: #23242a;
+  --ink: #ecedf0;
+  --muted: #a3a5ad;
+  --faint: #7b7d86;
+  --line: #2d2f36;
+  --accent: #8ea8ff;
+  --accent-soft: #232c4d;
+  --accent-ink: #0f1117;
+  --mark: #4a3f12;
+  --mark-edge: #8c7420;
+  --danger: #ff7b6e;
+  --ok: #5fd08a;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --rank-1: #9ec5f4;
+  --rank-2: #6da7ec;
+  --rank-3: #3987e5;
+  --rank-4: #256abf;
+  --rank-5: #184f95;
+  --rank-text-1: #0f1117;
+  --rank-text-2: #0f1117;
+  --rank-text-3: #0f1117;
+  --rank-text-4: #ecedf0;
+  --rank-text-5: #ecedf0;
+  --miss: #2a2b31;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-mark: var(--mark);
+  --color-mark-edge: var(--mark-edge);
+  --color-danger: var(--danger);
+  --color-ok: var(--ok);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-serif-face);
+  --font-mono: var(--font-mono-face);
+}
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  min-height: 100dvh;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Answer prose: a reading face, generous measure, quiet code. */
+.answer {
+  font-family: var(--font-serif-face), Georgia, serif;
+  font-size: 1.075rem;
+  line-height: 1.7;
+}
+.answer p {
+  margin: 0 0 0.9em;
+}
+.answer ul,
+.answer ol {
+  margin: 0 0 0.9em;
+  padding-left: 1.25em;
+}
+.answer ul {
+  list-style: disc;
+}
+.answer ol {
+  list-style: decimal;
+}
+.answer :not(pre) > code {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 0.86em;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.05em 0.3em;
+}
+.answer pre {
+  font-family: var(--font-mono-face), ui-monospace, monospace;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  margin: 0 0 1em;
+}
+.answer a:not(.cite) {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* A streaming caret that stops blinking for people who asked for less motion. */
+.caret::after {
+  content: '';
+  display: inline-block;
+  width: 0.5ch;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

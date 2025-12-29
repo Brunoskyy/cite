@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { chunkMarkdown, embeddingText, parseFrontMatter } from './chunk'
+import { chunkMarkdown, cleanHeading, embeddingText, parseFrontMatter } from './chunk'
 
 const doc = [
   '---', // 1
@@ -87,6 +87,12 @@ describe('chunkMarkdown', () => {
       const b = parts[i]!
       expect(a.startLine <= b.startLine && a.endLine >= b.endLine).toBe(false)
     }
+  })
+
+  it('strips link syntax and backticks from headings', () => {
+    expect(cleanHeading('Using `axios` [v0.22.0+](https://github.com/axios)')).toBe(
+      'Using axios v0.22.0+',
+    )
   })
 
   it('skips sections that are only a heading', () => {

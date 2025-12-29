@@ -66,7 +66,7 @@ export function chunkMarkdown(file: string, source: string, options: ChunkOption
     const m = inFence ? null : HEADING.exec(text)
     if (m?.[1] && m[2]) {
       const level = m[1].length
-      const heading = m[2].replace(/`/g, '')
+      const heading = cleanHeading(m[2])
       if (level === 1 && title === null) {
         title = heading
         continue
@@ -170,6 +170,15 @@ function trimBlank(lines: Section['lines']): Section['lines'] {
   while (a < b && lines[a]!.text.trim() === '') a += 1
   while (b > a && lines[b - 1]!.text.trim() === '') b -= 1
   return lines.slice(a, b)
+}
+
+/** `Using axios [v0.22.0+](https://...)` reads as `Using axios v0.22.0+`. */
+export function cleanHeading(raw: string): string {
+  return raw
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/`/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 /** The text an embedding sees: where the chunk sits, then what it says. */

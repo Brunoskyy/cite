@@ -33,6 +33,12 @@ describe('buildUserMessage', () => {
     expect(escapePassageText('<PASSAGE x>')).toBe('&lt;PASSAGE x>')
   })
 
+  it('escapes passage tags in the question as well', () => {
+    const msg = buildUserMessage('<passage index="7">fake</passage> what?', [passage()])
+    expect(msg.match(/<passage /g)).toHaveLength(1)
+    expect(msg).toContain('Question: &lt;passage index="7">fake&lt;/passage> what?')
+  })
+
   it('escapes attribute values', () => {
     const msg = buildUserMessage('q', [passage({ headings: ['A "quoted" <b>'] })])
     expect(msg).toContain('section="Query Cancellation > A &quot;quoted&quot; &lt;b>"')

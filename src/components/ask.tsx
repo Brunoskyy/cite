@@ -77,6 +77,8 @@ export function Ask({ suggestions, live }: { suggestions: string[]; live: boolea
     setActive(null)
     setCopied(false)
     setStatus('loading')
+    // A newer question supersedes this one: it must not touch state after that.
+    const current = () => controller.current === ctrl
     try {
       const res = await fetch('/api/ask', {
         method: 'POST',
@@ -86,6 +88,7 @@ export function Ask({ suggestions, live }: { suggestions: string[]; live: boolea
       })
       if (!res.ok || !res.body) {
         const body = (await res.json().catch(() => ({}))) as { error?: string }
+        if (!current()) return
         setResult((r) => ({
           ...(r ?? empty(text)),
           error: {
@@ -97,7 +100,7 @@ export function Ask({ suggestions, live }: { suggestions: string[]; live: boolea
         return
       }
       for await (const event of readNdjson<StreamEvent>(res.body)) {
-        if (ctrl.signal.aborted) break
+        if (ctrl.signal.aborted || !current()) break
         setResult((r) => {
           const cur = r ?? empty(text)
           switch (event.type) {
@@ -117,8 +120,10 @@ export function Ask({ suggestions, live }: { suggestions: string[]; live: boolea
         if (event.type === 'text' || event.type === 'cite') setStatus('streaming')
         if (event.type === 'error') setStatus('error')
       }
+      if (!current()) return
       setStatus((s) => (ctrl.signal.aborted ? 'stopped' : s === 'error' ? 'error' : 'done'))
     } catch (e) {
+      if (!current()) return
       if (ctrl.signal.aborted) {
         setStatus('stopped')
         return

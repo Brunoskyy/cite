@@ -32,7 +32,9 @@ export function buildUserMessage(question: string, passages: readonly Passage[])
     const where = [p.title, ...p.headings].join(' > ')
     return `<passage index="${i + 1}" source="${escapeAttribute(`${p.file}:${p.startLine}-${p.endLine}`)}" section="${escapeAttribute(where)}">\n${escapePassageText(p.text)}\n</passage>`
   })
-  return `<passages>\n${blocks.join('\n')}\n</passages>\n\nQuestion: ${question}`
+  // The question is escaped too: pasting a fake <passage> into it must not
+  // produce a source the model could cite.
+  return `<passages>\n${blocks.join('\n')}\n</passages>\n\nQuestion: ${escapePassageText(question)}`
 }
 
 export function isRefusal(answer: string): boolean {

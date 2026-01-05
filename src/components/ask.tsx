@@ -167,7 +167,7 @@ export function Ask({ suggestions, live }: { suggestions: string[]; live: boolea
   const refused = result?.done?.refused ?? false
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
       <div className="min-w-0">
         <form
           onSubmit={submit}
@@ -207,6 +207,7 @@ export function Ask({ suggestions, live }: { suggestions: string[]; live: boolea
               </button>
             ) : (
               <button
+                key="ask"
                 type="submit"
                 disabled={question.trim().length < 3}
                 className="bg-accent text-accent-ink rounded-lg px-4 py-1.5 text-sm font-medium disabled:opacity-40"

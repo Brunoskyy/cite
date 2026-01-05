@@ -16,7 +16,7 @@ const SERIES = [
 
 const ROW = 44
 const LEFT = 150
-const RIGHT = 24
+const RIGHT = 96
 const TOP = 30
 const WIDTH = 720
 
@@ -32,7 +32,7 @@ export function RunChart({ runs }: { runs: RunPoint[] }) {
   const ticks = [0, 0.25, 0.5, 0.75, 1]
 
   return (
-    <figure className="m-0">
+    <figure className="m-0 max-w-3xl">
       <div className="text-muted mb-2 flex flex-wrap items-center gap-4 text-xs" aria-hidden="true">
         {SERIES.map((s) => (
           <span key={s.key} className="inline-flex items-center gap-1.5">

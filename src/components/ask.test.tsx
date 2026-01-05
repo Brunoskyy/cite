@@ -92,6 +92,23 @@ describe('Ask', () => {
     expect(await screen.findByText('Second answer.')).toBeInTheDocument()
   })
 
+  it('Stop stops, and does not submit the question again', async () => {
+    const { fetchMock, pending } = controlledFetch()
+    vi.stubGlobal('fetch', fetchMock)
+    render(<Ask suggestions={['Long one?']} live />)
+    await userEvent.click(screen.getByRole('button', { name: 'Long one?' }))
+    await waitFor(() => expect(pending).toHaveLength(1))
+    act(() => {
+      pending[0]!.push(sources)
+      pending[0]!.push(JSON.stringify({ type: 'text', text: 'Partial' }))
+    })
+    await screen.findByText('Partial')
+    await userEvent.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(await screen.findByText('Stopped.')).toBeInTheDocument()
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(pending[0]!.signal.aborted).toBe(true)
+  })
+
   it('explains the no-key case and shows an error with retry', async () => {
     const { fetchMock, pending } = controlledFetch()
     vi.stubGlobal('fetch', fetchMock)

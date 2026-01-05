@@ -63,6 +63,9 @@ export async function vectorSearch(question: string, limit: number): Promise<Pas
   return rows.map(toPassage)
 }
 
+/** The pipeline's defaults, shared with the inspector so it shows exactly what an answer uses. */
+export const DEFAULTS = { k: 6, pool: 30, rerankTop: 20 } as const
+
 export interface RetrieveOptions {
   mode?: RetrievalMode
   /** How many passages to return. */
@@ -73,8 +76,8 @@ export interface RetrieveOptions {
 
 export async function retrieve(question: string, options: RetrieveOptions = {}): Promise<Scored[]> {
   const mode = options.mode ?? 'hybrid'
-  const k = options.k ?? 6
-  const pool = options.pool ?? 30
+  const k = options.k ?? DEFAULTS.k
+  const pool = options.pool ?? DEFAULTS.pool
 
   if (mode === 'keyword') {
     return (await keywordSearch(question, k)).map((passage, i) => ({
@@ -105,7 +108,7 @@ export async function retrieve(question: string, options: RetrieveOptions = {}):
   }))
   if (mode === 'hybrid') return fused.slice(0, k)
 
-  const candidates = fused.slice(0, Math.min(pool, 20))
+  const candidates = fused.slice(0, Math.min(pool, DEFAULTS.rerankTop))
   const scores = await rerank(
     question,
     candidates.map((c) => c.passage),

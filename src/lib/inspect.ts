@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { keywordSearch, vectorSearch } from './retrieve'
+import { DEFAULTS, keywordSearch, vectorSearch } from './retrieve'
 import { rerank } from './rerank'
 import { reciprocalRankFusion } from './rrf'
 import type { Passage } from './types'
@@ -29,15 +29,17 @@ export interface Inspection {
  */
 export async function inspect(
   question: string,
-  options: { pool?: number; withRerank?: boolean } = {},
+  options: { withRerank?: boolean } = {},
 ): Promise<Inspection> {
-  const pool = options.pool ?? 10
+  // Same pool and rerank depth as retrieve(), so the top six here are the
+  // six an answer is written from.
+  const pool = DEFAULTS.pool
   const t0 = performance.now()
   const keyword = await keywordSearch(question, pool)
   const t1 = performance.now()
   const vector = await vectorSearch(question, pool)
   const t2 = performance.now()
-  const fused = reciprocalRankFusion([keyword, vector], (p) => p.id)
+  const fused = reciprocalRankFusion([keyword, vector], (p) => p.id).slice(0, DEFAULTS.rerankTop)
   let scores: number[] | null = null
   let rerankMs: number | null = null
   if (options.withRerank !== false) {

@@ -110,19 +110,19 @@ export default async function InspectPage({ searchParams }: { searchParams: Sear
                   <th scope="col" className="px-4 py-2.5 font-medium">
                     Passage
                   </th>
-                  <th scope="col" className="px-3 py-2.5 text-right font-medium">
+                  <th scope="col" className="w-24 px-3 py-2.5 text-right font-medium">
                     Keyword
                   </th>
-                  <th scope="col" className="px-3 py-2.5 text-right font-medium">
+                  <th scope="col" className="w-24 px-3 py-2.5 text-right font-medium">
                     Vector
                   </th>
-                  <th scope="col" className="px-3 py-2.5 text-right font-medium">
+                  <th scope="col" className="w-24 px-3 py-2.5 text-right font-medium">
                     Fused
                   </th>
-                  <th scope="col" className="px-3 py-2.5 text-right font-medium">
+                  <th scope="col" className="w-24 px-3 py-2.5 text-right font-medium">
                     Reranked
                   </th>
-                  <th scope="col" className="px-4 py-2.5 text-right font-medium">
+                  <th scope="col" className="w-28 px-4 py-2.5 text-right font-medium">
                     Rerank score
                   </th>
                 </tr>

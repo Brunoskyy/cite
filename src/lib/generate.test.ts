@@ -90,6 +90,22 @@ describe('generateAnswer', () => {
     ])
   })
 
+  it('flushes text held back for a possible marker before reporting an error', async () => {
+    const error = new Anthropic.APIConnectionError({ message: 'reset' })
+    const events = await collect(
+      generateAnswer(
+        fakeClient({ chunks: ['It ends with [1', ' x'], error, failAfter: 1 }),
+        'q',
+        passages,
+      ),
+    )
+    expect(events).toEqual([
+      { type: 'text', text: 'It ends with ' },
+      { type: 'text', text: '[1' },
+      { type: 'error', message: 'Could not reach the API.', retryable: true },
+    ])
+  })
+
   it('stops quietly when the caller aborts', async () => {
     const controller = new AbortController()
     const out: AnswerEvent[] = []

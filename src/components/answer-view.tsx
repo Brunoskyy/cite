@@ -5,7 +5,7 @@ import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
 import type { Segment } from '@/lib/citations'
-import { citeIndex, segmentsToMarkdown } from '@/lib/render'
+import { rehypeCitations, segmentsToMarkdown } from '@/lib/render'
 import type { Passage } from '@/lib/types'
 
 import { CitationChip } from './citation-chip'
@@ -39,9 +39,12 @@ function Cite({ n }: { n: number }) {
  * update between mousedown and click would swallow the click.
  */
 const components: Components = {
+  span({ node, children, ...rest }) {
+    const raw = node?.properties?.dataCite
+    if (raw !== undefined) return <Cite n={Number(raw)} />
+    return <span {...rest}>{children}</span>
+  },
   a({ href, children }) {
-    const n = citeIndex(href)
-    if (n !== null) return <Cite n={n} />
     // Model output: only web links survive, anything else is plain text.
     const safe = href && /^https?:\/\//.test(href) ? href : undefined
     return safe ? (
@@ -56,7 +59,12 @@ const components: Components = {
 
 const Markdown = memo(function Markdown({ text }: { text: string }) {
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml components={components}>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeCitations]}
+      skipHtml
+      components={components}
+    >
       {text}
     </ReactMarkdown>
   )

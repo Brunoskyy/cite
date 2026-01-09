@@ -96,6 +96,8 @@ export async function* generateAnswer(
     }
   } catch (e) {
     if (signal?.aborted || e instanceof Anthropic.APIUserAbortError) return
+    // Whatever the parser was holding back already reached the model's output; show it.
+    for (const segment of parser.end()) yield segment
     yield describeError(e)
   }
 }

@@ -82,4 +82,56 @@ describe('CitationParser', () => {
   it('dedupes repeated indices in one marker', () => {
     expect(parseAnswer('x [2, 2]', 3).segments[1]).toEqual({ type: 'cite', indices: [2] })
   })
+
+  it('does not depend on where the stream splits after a word', () => {
+    const whole = parseAnswer('Read data.pages[1] here', 6).segments
+    expect(whole).toEqual([{ type: 'text', text: 'Read data.pages[1] here' }])
+    expect(feed(['Read data.pages', '[', '1', '] here'], 6).segments).toEqual(whole)
+    const { segments, parser } = feed(['Read data.pages', '[0]', ' here'], 6)
+    expect(segments).toEqual([{ type: 'text', text: 'Read data.pages[0] here' }])
+    expect(parser.stats).toEqual({ citations: 0, invalid: [] })
+    // After a space it is still a citation, whatever the split.
+    expect(feed(['Cancel it', ' ', '[', '1]', '.'], 3).segments).toEqual([
+      { type: 'text', text: 'Cancel it ' },
+      { type: 'cite', indices: [1] },
+      { type: 'text', text: '.' },
+    ])
+  })
+
+  it('leaves markers inside fenced code alone, however the fence arrives', () => {
+    const text = 'Like this [1]:\n\n```ts\nconst xs = [1, 2]\n```\n\nDone [2].'
+    const expected: Segment[] = [
+      { type: 'text', text: 'Like this ' },
+      { type: 'cite', indices: [1] },
+      { type: 'text', text: ':\n\n```ts\nconst xs = [1, 2]\n```\n\nDone ' },
+      { type: 'cite', indices: [2] },
+      { type: 'text', text: '.' },
+    ]
+    expect(parseAnswer(text, 3).segments).toEqual(expected)
+    expect(
+      feed(['Like this [1]:\n\n`', '``ts\nconst xs = [', '1, 2]\n``', '`\n\nDone [2].'], 3)
+        .segments,
+    ).toEqual(expected)
+    expect(parseAnswer(text, 3).stats).toEqual({ citations: 2, invalid: [] })
+  })
+
+  it('leaves markers inside inline code alone', () => {
+    const text = 'Write `[1]` literally, or ``a [2] b`` too [3].'
+    expect(parseAnswer(text, 3).segments).toEqual([
+      { type: 'text', text: 'Write `[1]` literally, or ``a [2] b`` too ' },
+      { type: 'cite', indices: [3] },
+      { type: 'text', text: '.' },
+    ])
+  })
+
+  it('does not let a stray backtick swallow later paragraphs', () => {
+    expect(parseAnswer('A lone ` tick.\n\nNext [1].', 3).stats.citations).toBe(1)
+  })
+
+  it('reads a marker right after an exclamation mark as a citation', () => {
+    expect(parseAnswer('That is all![1]', 3).segments).toEqual([
+      { type: 'text', text: 'That is all!' },
+      { type: 'cite', indices: [1] },
+    ])
+  })
 })

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { answerForClipboard, citeIndex, segmentsToMarkdown } from './render'
+import { answerForClipboard, segmentsToMarkdown } from './render'
 import type { Passage } from './types'
 
 const p = (file: string): Passage => ({
@@ -20,11 +20,10 @@ describe('render helpers', () => {
     { type: 'text' as const, text: '.' },
   ]
 
-  it('turns citations into anchor links for the renderer', () => {
-    expect(segmentsToMarkdown(segments)).toBe('Use it [1](#cite-1)[2](#cite-2).')
-    expect(citeIndex('#cite-12')).toBe(12)
-    expect(citeIndex('https://x.dev/#cite-1')).toBeNull()
-    expect(citeIndex(undefined)).toBeNull()
+  it('turns citations into tokens no Markdown can produce', () => {
+    expect(segmentsToMarkdown(segments)).toBe('Use it \uE0001\uE001\uE0002\uE001.')
+    // Sentinels typed into text are stripped, so they can never forge a citation.
+    expect(segmentsToMarkdown([{ type: 'text', text: 'x\uE0009\uE001y' }])).toBe('x9y')
   })
 
   it('copies the answer with markers and only the sources it cited', () => {

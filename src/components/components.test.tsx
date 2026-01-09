@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import { parseAnswer } from '@/lib/citations'
 import type { Passage } from '@/lib/types'
 
 import { AnswerView } from './answer-view'
@@ -94,6 +95,41 @@ describe('AnswerView', () => {
       'href',
       'https://tanstack.com',
     )
+  })
+})
+
+describe('AnswerView with hostile model output', () => {
+  const view = (text: string, count = 2) => {
+    const { segments } = parseAnswer(text, count)
+    render(
+      <AnswerView
+        segments={segments}
+        passages={passages}
+        streaming={false}
+        active={null}
+        onSelect={vi.fn()}
+        onPeek={vi.fn()}
+      />,
+    )
+  }
+
+  it('renders a model-written #cite link as text, never a chip', () => {
+    view('See [the docs](#cite-9) and [here](#cite-2).')
+    expect(screen.queryAllByRole('button')).toHaveLength(0)
+    expect(screen.getByText('the docs').closest('a')).toBeNull()
+  })
+
+  it('keeps a citation after an exclamation mark a chip, not an image', () => {
+    view('That is all![1]')
+    expect(document.querySelector('img')).toBeNull()
+    expect(screen.getByRole('button', { name: /^Source 1/ })).toBeInTheDocument()
+    expect(screen.getByText(/That is all!/)).toBeInTheDocument()
+  })
+
+  it('leaves bracketed numbers inside code blocks as code', () => {
+    view('Like this [1]:\n\n```ts\nconst xs = [1, 2]\n```\n')
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+    expect(document.querySelector('pre')?.textContent).toBe('const xs = [1, 2]\n')
   })
 })
 

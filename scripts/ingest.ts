@@ -12,7 +12,7 @@ import { embedPassages } from '../src/lib/embed'
 /**
  * Chunks every corpus file, embeds the chunks, and replaces the table's
  * contents in one transaction. Each chunk is keyed by a hash of its file,
- * lines and text, so re-running on an unchanged corpus re-embeds nothing.
+ * lines and embedded text (title and headings included), so re-running on an unchanged corpus re-embeds nothing.
  */
 async function main() {
   const started = performance.now()
@@ -22,7 +22,8 @@ async function main() {
     const source = await readFile(join(CORPUS_DIR, ...file.split('/')), 'utf8')
     for (const c of chunkMarkdown(file, source)) {
       const hash = createHash('sha256')
-        .update(`${c.file}:${c.startLine}-${c.endLine}:${c.headings.join('>')}:${c.text}`)
+        // Everything that ends up in the row: the embedded text includes the title.
+        .update(`${c.file}:${c.startLine}-${c.endLine}:${c.headings.join('>')}:${embeddingText(c)}`)
         .digest('hex')
       if (!chunks.some((x) => x.hash === hash)) chunks.push({ ...c, hash })
     }

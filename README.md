@@ -54,7 +54,7 @@ Claude Opus 5.5.
 
 | Command                                                |                                                                   |
 | ------------------------------------------------------ | ----------------------------------------------------------------- |
-| `npm test`                                             | 69 tests, no database or key needed                               |
+| `npm test`                                             | 83 tests, no database or key needed                               |
 | `npm run eval:retrieval -- --mode rerank`              | one retrieval run over the question set, written to `evals/runs/` |
 | `npm run eval:answers`                                 | answer quality over the same questions; needs a key               |
 | `npm run fixtures`                                     | re-records the demo answers against the current index             |
@@ -97,8 +97,16 @@ As the answer streams, a parser splits it into text and citations. A marker
 can arrive cut in half (`[1` in one chunk, `2]` in the next), so the parser
 holds back only a tail that could still become a marker and releases
 everything else at once. A number that points at no passage is dropped and
-counted; the UI never offers a link to a source that was not sent. `arr[0]`
-in a code sample stays code.
+counted; the UI never offers a link to a source that was not sent. The parser
+also tracks code fences and inline code across chunks, and remembers the last
+character it released, so `data.pages[1]` and `[1, 2]` inside a snippet stay
+code however the stream happens to split them.
+
+Citations then reach the Markdown renderer as private-use characters, not as
+Markdown links, and a small rehype step turns them into placeholders that the
+view renders as buttons. Those characters are stripped from everything the
+model writes, so a model-written `[docs](#cite-9)` is an ordinary link and
+`all![1]` cannot become an image.
 
 In the browser each citation is a button. Opening one shows the passage in its
 file, with the cited lines highlighted, a few lines of context, and a link to
@@ -164,8 +172,9 @@ the Retrieval page shares.
 npm test
 ```
 
-69 tests, none of which need a database or a key. They cover chunking (line
-ranges, code fences, heading-only sections), fusion, the citation parser,
+83 tests, none of which need a database or a key. They cover chunking (line
+ranges, code fences, heading-only sections), fusion, the citation parser
+(including splits after a word, markers inside code, and hostile Markdown),
 prompt escaping, the generator against a fake stream, the fixture recorder,
 the eval metrics against the committed question set, the ask route's
 validation and limits, and the React components: citation buttons, link
@@ -197,8 +206,10 @@ src/app/             Ask, Retrieval and Evals pages; /api/ask, /api/source
 - One corpus. The pipeline is generic, but the eval questions and the GitHub
   links are written for this one.
 - The rate limit and the semaphore are in-process. Behind more than one
-  server they would need a shared store, and behind a proxy the client key
-  should come from a trusted header only.
+  server they would need a shared store. `X-Forwarded-For` is only read when
+  `TRUST_PROXY` says how many proxies append to it; without that setting
+  every request shares one budget, because Next.js route handlers do not
+  expose the socket address and the header alone is whatever the client sent.
 - Reranking runs on CPU; on a small server it is the slowest part of every
   answer. A hosted reranker or a GPU would fix that.
 - No conversation. Each question stands alone.

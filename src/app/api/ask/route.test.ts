@@ -70,11 +70,23 @@ describe('POST /api/ask', () => {
     expect((await POST(post('x'.repeat(5000), '3.3.3.3'))).status).toBe(413)
   })
 
-  it('rate limits one client without affecting another', async () => {
+  it('behind a trusted proxy, rate limits one client without affecting another', async () => {
+    vi.stubEnv('TRUST_PROXY', '1')
     const { POST } = await import('./route')
     let last = 0
     for (let i = 0; i < 21; i += 1) last = (await POST(post('{}', '4.4.4.4'))).status
     expect(last).toBe(429)
     expect((await POST(post('{}', '5.5.5.5'))).status).toBe(400)
+    vi.unstubAllEnvs()
+  })
+
+  it('without a trusted proxy, a new X-Forwarded-For does not buy a new budget', async () => {
+    vi.resetModules()
+    vi.stubEnv('TRUST_PROXY', '')
+    const { POST } = await import('./route')
+    let last = 0
+    for (let i = 0; i < 21; i += 1) last = (await POST(post('{}', `7.7.7.${i}`))).status
+    expect(last).toBe(429)
+    vi.unstubAllEnvs()
   })
 })

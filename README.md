@@ -64,7 +64,7 @@ Stop the app with Ctrl+C and the database with `docker compose down`;
 
 | Command (repo root) | |
 | --- | --- |
-| `npm test` | 83 tests, no database or key needed |
+| `npm test` | 84 tests, no database or key needed |
 | `npm run eval:retrieval -- --mode rerank` | one retrieval run, written to `evals/runs/` |
 | `npm run eval:answers` | answer quality over the same questions; needs a key |
 | `npm run fixtures` | re-records the demo answers against the current index |
@@ -122,8 +122,8 @@ committed an `eval:answers` run yet; it needs a key.
 
 ## Things worth opening
 
-- **`src/lib/citations.ts`:** the streaming citation parser, about seventy
-  lines, and the tests that pin its edge cases.
+- **`src/lib/citations.ts`:** the streaming citation parser, and the tests
+  that pin its edge cases.
 - **`scripts/record-fixtures.ts`:** demo answers cite `{{file:line}}`, and the
   recorder refuses to write if a cited passage was not retrieved. I added it
   after a reranker change pointed one answer at the wrong source.
@@ -134,7 +134,7 @@ committed an `eval:answers` run yet; it needs a key.
 
 ## Tests
 
-The 83 tests cover chunking, fusion, the citation parser including hostile
+The 84 tests cover chunking, fusion, the citation parser including hostile
 Markdown, prompt escaping, the generator against a fake stream, the fixture
 recorder, the eval metrics, the ask route's limits, and the React components.
 
